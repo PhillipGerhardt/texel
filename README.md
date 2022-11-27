@@ -52,4 +52,5 @@ Animate something:
 
 eval(fs.readFileSync('animations.js')+'');
 eval(fs.readFileSync('movies.js')+'');
+eval(fs.readFileSync('slideshow.js')+'');
 
