@@ -47,3 +47,9 @@ Animate something:
     l.size = t.Animation(s.map(v=>v/2));
     l.rotation = t.Animation(r + 3.1415)
     setTimeout(()=>{l.size = s; l.rotation = r;}, 2000);
+
+## Run demos
+
+eval(fs.readFileSync('animations.js')+'');
+eval(fs.readFileSync('movies.js')+'');
+
