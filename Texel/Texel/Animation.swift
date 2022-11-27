@@ -52,7 +52,7 @@ class Animation {
     }
 
     deinit {
-        print("Animation.deinit")
+//        print("Animation.deinit")
     }
 
     func start(src: Float, target: inout Published<Float>.Publisher) {
