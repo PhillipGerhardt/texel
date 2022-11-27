@@ -55,7 +55,9 @@ in get_movies() and get_images().
 Otherwise files from your Movies and Pictures folders
 and their subfolders are used.
 
-eval(fs.readFileSync('animations.js')+'');
-eval(fs.readFileSync('movies.js')+'');
-eval(fs.readFileSync('slideshow.js')+'');
+    eval(fs.readFileSync('animations.js')+'');
+    eval(fs.readFileSync('movies.js')+'');
+    eval(fs.readFileSync('slideshow.js')+'');
+    eval(fs.readFileSync('grid_exchange.js')+'');
+    eval(fs.readFileSync('videoplayer.js')+'');
 
