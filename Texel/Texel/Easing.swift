@@ -176,7 +176,7 @@ func inOutBounce(_ x: Float) -> Float {
       : (1 + outBounce(2 * x - 1)) / 2
 }
 
-enum Ease: String {
+enum Ease: String, CaseIterable {
 
     static func fun(for mode: Ease) -> (Float) -> Float {
         switch mode {

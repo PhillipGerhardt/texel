@@ -15,6 +15,7 @@
 		684660112933B42700DC6F7F /* AudiblePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684660102933B42700DC6F7F /* AudiblePlayer.swift */; };
 		684660132933B4AF00DC6F7F /* NodeMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684660122933B4AF00DC6F7F /* NodeMovie.swift */; };
 		684660152933BAB900DC6F7F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 684660142933BAB900DC6F7F /* README.md */; };
+		684660172933DBCD00DC6F7F /* EngineExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684660162933DBCD00DC6F7F /* EngineExtensions.swift */; };
 		68A9BDF529336ACC0036AA5C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A9BDF429336ACC0036AA5C /* AppDelegate.swift */; };
 		68A9BDFB29336ACC0036AA5C /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 68A9BDFA29336ACC0036AA5C /* Shaders.metal */; };
 		68A9BDFE29336ACD0036AA5C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68A9BDFD29336ACD0036AA5C /* Assets.xcassets */; };
@@ -53,6 +54,7 @@
 		684660102933B42700DC6F7F /* AudiblePlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudiblePlayer.swift; sourceTree = "<group>"; };
 		684660122933B4AF00DC6F7F /* NodeMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeMovie.swift; sourceTree = "<group>"; };
 		684660142933BAB900DC6F7F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		684660162933DBCD00DC6F7F /* EngineExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineExtensions.swift; sourceTree = "<group>"; };
 		68A9BDF129336ACC0036AA5C /* Texel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Texel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		68A9BDF429336ACC0036AA5C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		68A9BDFA29336ACC0036AA5C /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 				68A9BE1C293370D40036AA5C /* DisplayLink.swift */,
 				68A9BE3B293394710036AA5C /* Easing.swift */,
 				68A9BE1229336FD50036AA5C /* Engine.swift */,
+				684660162933DBCD00DC6F7F /* EngineExtensions.swift */,
 				68A9BE2B29338DFA0036AA5C /* Event.swift */,
 				68A9BE14293370070036AA5C /* Fehler.swift */,
 				68A9BE25293373BA0036AA5C /* Fitting.swift */,
@@ -290,6 +293,7 @@
 				68A9BE2A29338CF40036AA5C /* Image.swift in Sources */,
 				68A9BE28293373DC0036AA5C /* SimdExtensions.swift in Sources */,
 				68A9BE1129336F6D0036AA5C /* MetalViewController.swift in Sources */,
+				684660172933DBCD00DC6F7F /* EngineExtensions.swift in Sources */,
 				684660112933B42700DC6F7F /* AudiblePlayer.swift in Sources */,
 				684660062933951C00DC6F7F /* NodeTexel.swift in Sources */,
 				68A9BE0E29336F1F0036AA5C /* Window.swift in Sources */,
