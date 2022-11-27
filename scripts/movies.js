@@ -1,6 +1,7 @@
 'use strict';
 
 const t = process._linkedBinding('texel'); 
+delete require.cache[require.resolve('./txl.js')];
 const txl = require('./txl.js');
 const path = require('path');
 
@@ -47,12 +48,6 @@ function make(files) {
     layers[0].draw = true;
     t.layers = layers;
 }
-
-let n = 0;
-let px = 0;
-let py = 0;
-let files = [];
-let inTransition = false;
 
 t.onKeyDown = (keyCode) => {
     let idx = n * py + px;
@@ -107,15 +102,14 @@ t.onKeyDown = (keyCode) => {
     }
 };
 
-(async () => {
-    let movies = await txl.get_movies();
-    console.log(movies);
+let n = 0;
+let px = 0;
+let py = 0;
+let inTransition = false;
 
-    for (let i = 0; i < movies.length; ++i) {
-        t.makeThumbnail(movies[i], path.join('/tmp', i + '.png'));
-    }
-
-    make(movies);
-    files = movies;
-})();
+let files = txl.get_movies();
+for (let i = 0; i < files.length; ++i) {
+    t.makeThumbnail(files[i], path.join('/tmp', i + '.png'));
+}
+make(files);
 

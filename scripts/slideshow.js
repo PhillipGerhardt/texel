@@ -1,7 +1,6 @@
 'use strict';
 
 delete require.cache[require.resolve('./txl.js')];
-
 const t = process._linkedBinding('texel'); 
 const txl = require('./txl.js');
 
@@ -45,9 +44,6 @@ function step() {
     global.gc();
 }
 
-let files = [];
-let index = 0;
-
 t.onKeyDown = keyCode => { 
     if (keyCode == 125) { // down
         index += 1;
@@ -60,12 +56,11 @@ t.onKeyDown = keyCode => {
     step(); 
 };
 
-(async () => {
-    files = await txl.get_assets();
-    txl.shuffle(files);
-    index = 0;
-    t.layers = [];
-    step();
-    global.gc();
-})();
+let index = 0;
+let files = txl.get_assets();
+txl.shuffle(files);
+index = 0;
+t.layers = [];
+step();
+global.gc();
 

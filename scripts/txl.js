@@ -4,17 +4,17 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
-const { resolve } = require('path');
-const { readdir } = require('fs').promises;
-
-async function getFiles(dir)
+function get_files(dir)
 {
-    const dirents = await readdir(dir, {withFileTypes: true});
-    const files   = await Promise.all(dirents.map((dirent) => {
-        const res = resolve(dir, dirent.name);
-        return dirent.isDirectory() ? getFiles(res) : res;
-    }));
-    return files.flat();
+    let files = [];
+    let paths = fs.readdirSync(dir).map( f => path.join(dir, f ));
+    for (let path of paths) {
+        if (fs.lstatSync(path).isDirectory()) {
+            files = files.concat(get_files(path));        
+        }
+    } 
+    files = files.concat(paths);
+    return files;
 }
 
 function is_movie(file)
@@ -49,30 +49,28 @@ function is_asset(file)
     return is_movie(file) || is_image(file);
 }
 
-async function get_movies()
+function get_movies()
 {
-    console.log('asd');
-    let files = await getFiles(path.join(os.homedir(), 'Movies'));
+    let files = get_files(path.join(os.homedir(), 'Movies'));
     files = files.filter(file => {
         return is_movie(file);
     });
     return files;
 };
 
-async function get_images()
+function get_images()
 {
-    console.log('asd');
-    let files = await getFiles(path.join(os.homedir(), 'Pictures'));
+    let files = get_files(path.join(os.homedir(), 'Pictures'));
     files = files.filter(file => {
         return is_image(file);
     });
     return files;
 };
 
-async function get_assets()
+function get_assets()
 {
-    let movies = await get_movies();
-    let images = await get_images();
+    let movies = get_movies();
+    let images = get_images();
     let files = movies.concat(images);
     files = files.filter(file => {
         return is_asset(file);
@@ -90,6 +88,12 @@ function shuffle(array)
     }
 }
 
+// min and max included
+function randomIntFromInterval(min, max)
+{
+    return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
 module.exports = {
     get_movies: get_movies,
     get_images: get_images,
@@ -97,5 +101,7 @@ module.exports = {
     is_image: is_image,
     get_assets: get_assets,
     shuffle: shuffle,
+    randomIntFromInterval: randomIntFromInterval,
+    get_files: get_files,
 };
 
