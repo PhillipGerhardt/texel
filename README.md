@@ -50,6 +50,11 @@ Animate something:
 
 ## Run demos
 
+Adjust the path to your content in "scripts/txl.js"
+in get_movies() and get_images().
+Otherwise files from your Movies and Pictures folders
+and their subfolders are used.
+
 eval(fs.readFileSync('animations.js')+'');
 eval(fs.readFileSync('movies.js')+'');
 eval(fs.readFileSync('slideshow.js')+'');
