@@ -13,8 +13,8 @@ let texel_descriptors: [napi_property_descriptor] = [
     napi_property_descriptor(utf8name: strdup("clearColor"), name: nil, method: nil, getter: get_clearColor, setter: set_clearColor, value: nil, attributes: napi_default_jsproperty, data: nil),
     napi_property_descriptor(utf8name: strdup("size"), name: nil, method: nil, getter: get_size, setter: nil, value: nil, attributes: napi_default_jsproperty, data: nil),
     napi_property_descriptor(utf8name: strdup("quit"), name: nil, method: quit, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
-    napi_property_descriptor(utf8name: strdup("easingFunctions"), name: nil, method: easing_functions, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("makeThumbnail"), name: nil, method: make_thumbnail, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("enums"), name: nil, method: enums, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
 
     napi_property_descriptor(utf8name: strdup("Animation"), name: nil, method: make_animation, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("Layer"), name: nil, method: make_layer, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
@@ -62,13 +62,6 @@ func quit(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     return nil
 }
 
-// MARK: - easing_functions
-
-func easing_functions(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
-    let allCases = Ease.allCases.map{$0.rawValue}
-    return as_value(env, allCases)
-}
-
 // MARK: - thumbnail
 
 func make_thumbnail(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
@@ -80,3 +73,15 @@ func make_thumbnail(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value
     engine.saveThumbnail(of: arg0, to: arg1, size: arg2)
     return nil
 }
+
+// MARK: - enums
+
+func enums(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+    var result = [String:[String]]()
+    result[String(describing: Ease.self)] = Ease.allCases.map{$0.rawValue}
+    result[String(describing: ScaleMode.self)] = ScaleMode.allCases.map{$0.rawValue}
+    result[String(describing: VerticalAlignment.self)] = VerticalAlignment.allCases.map{$0.rawValue}
+    result[String(describing: HorizontalAlignment.self)] = HorizontalAlignment.allCases.map{$0.rawValue}
+    return as_value(env, result)
+}
+

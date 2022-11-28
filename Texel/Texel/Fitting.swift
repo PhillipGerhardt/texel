@@ -5,7 +5,7 @@
 //  Created by Phillip Gerhardt on 27.11.22.
 //
 
-enum ScaleMode: String {
+enum ScaleMode: String, CaseIterable {
     /// maintain aspect, letterbox
     case fit
     /// maintain aspect, fill whole layer
@@ -16,13 +16,13 @@ enum ScaleMode: String {
     case original
 }
 
-enum VerticalAlignment: String {
+enum VerticalAlignment: String, CaseIterable {
     case top
     case center
     case bottom
 }
 
-enum HorizontalAlignment: String {
+enum HorizontalAlignment: String, CaseIterable {
     case left
     case center
     case right

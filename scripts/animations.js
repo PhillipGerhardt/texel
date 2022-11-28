@@ -1,6 +1,6 @@
 t = process._linkedBinding('texel'); 
 
-let anims = t.easingFunctions();
+let anims = t.enums()["Ease"];
 let n = anims.length;
 
 var layers = []

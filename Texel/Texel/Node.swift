@@ -150,7 +150,6 @@ func as_value(_ env: napi_env?, _ t: Any) -> napi_value? {
         }
         return val;
     }
-
     if let t = t as? Int {
         var val: napi_value?
         guard napi_create_int64(env, Int64(t), &val) == napi_ok else {
@@ -159,7 +158,6 @@ func as_value(_ env: napi_env?, _ t: Any) -> napi_value? {
         }
         return val
     }
-
     if let t = t as? Int32 {
         var val: napi_value?
         guard napi_create_int32(env, t, &val) == napi_ok else {
@@ -168,7 +166,6 @@ func as_value(_ env: napi_env?, _ t: Any) -> napi_value? {
         }
         return val
     }
-
     if let t = t as? Int64 {
         var val: napi_value?
         guard napi_create_int64(env, t, &val) == napi_ok else {
@@ -177,7 +174,6 @@ func as_value(_ env: napi_env?, _ t: Any) -> napi_value? {
         }
         return val
     }
-
     if let t = t as? Float {
         var val: napi_value?
         guard napi_create_double(env, Double(t), &val) == napi_ok else {
@@ -186,28 +182,6 @@ func as_value(_ env: napi_env?, _ t: Any) -> napi_value? {
         }
         return val
     }
-
-    if let t = t as? simd_int2 {
-        return as_value(env, [t.x, t.y])
-    }
-
-    if let t = t as? simd_float2 {
-        return as_value(env, [t.x, t.y])
-    }
-
-    if let t = t as? simd_float3 {
-        return as_value(env, [t.x, t.y, t.z])
-    }
-
-    if let t = t as? simd_float4 {
-        return as_value(env, [t.x, t.y, t.z, t.w])
-    }
-
-    if let t = t as? simd_quatf {
-        print("simd_quatf", t.angle, t.axis.x, t.axis.y, t.axis.z)
-        return as_value(env, [t.angle, [t.axis.x, t.axis.y, t.axis.z]])
-    }
-
     if let t = t as? String {
         var val: napi_value?
         guard napi_create_string_utf8(env, t, t.count, &val) == napi_ok else {
@@ -216,14 +190,33 @@ func as_value(_ env: napi_env?, _ t: Any) -> napi_value? {
         }
         return val
     }
-
+    if let t = t as? simd_int2 { return as_value(env, [t.x, t.y]) }
+    if let t = t as? simd_float2 { return as_value(env, [t.x, t.y]) }
+    if let t = t as? simd_float3 { return as_value(env, [t.x, t.y, t.z]) }
+    if let t = t as? simd_float4 { return as_value(env, [t.x, t.y, t.z, t.w]) }
+    if let t = t as? simd_quatf { return as_value(env, [t.angle, [t.axis.x, t.axis.y, t.axis.z]]) }
+    if let t = t as? [String:Any] {
+        var result: napi_value?
+        guard napi_create_object(env!, &result) == napi_ok else {
+            napi_throw_error(env, nil, "napi_create_object")
+            return nil
+        }
+        for (key, value) in t {
+            guard let v = as_value(env, value) else { return nil }
+            guard napi_set_named_property(env, result, key, v) == napi_ok else {
+                napi_throw_error(env, nil, "napi_set_named_property")
+                return nil
+            }
+        }
+        return result
+    }
     if let t = t as? [Any] {
         var result: napi_value?
         guard napi_create_array_with_length(env!, t.count, &result) == napi_ok else {
             napi_throw_error(env, nil, "napi_create_array_with_length")
             return nil
         }
-        for (i,t) in t.enumerated() {
+        for (i, t) in t.enumerated() {
             guard let v = as_value(env, t) else { return nil }
             guard napi_set_element(env, result, UInt32(i), v) == napi_ok else {
                 napi_throw_error(env, nil, "napi_set_element")
