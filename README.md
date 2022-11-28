@@ -83,4 +83,5 @@ and their subfolders are used.
     eval(fs.readFileSync('slideshow.js')+'');
     eval(fs.readFileSync('grid_exchange.js')+'');
     eval(fs.readFileSync('videoplayer.js')+'');
+    eval(fs.readFileSync('alignment_fitting.js')+'');
 

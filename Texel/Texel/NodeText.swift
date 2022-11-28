@@ -9,7 +9,7 @@ let text_descriptors: [napi_property_descriptor] = [
     napi_property_descriptor(utf8name: strdup("backgroundColor"), name: nil, method: nil, getter: get_text_backgroundColor, setter: set_text_backgroundColor, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("foregroundColor"), name: nil, method: nil, getter: get_text_foregroundColor, setter: set_text_foregroundColor, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("text"), name: nil, method: nil, getter: get_text_text, setter: set_text_text, value: nil, attributes: napi_default_method, data: nil),
-    napi_property_descriptor(utf8name: strdup("textSize"), name: nil, method: nil, getter: get_text_textSize, setter: set_text_textSize, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("fontSize"), name: nil, method: nil, getter: get_text_fontSize, setter: set_text_fontSize, value: nil, attributes: napi_default_method, data: nil),
 ] + content_descriptors
 
 func make_text(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value?
@@ -73,17 +73,17 @@ func set_text_text(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value?
     return nil
 }
 
-// MARK: textSize
+// MARK: fontSize
 
-func get_text_textSize(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+func get_text_fontSize(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     guard let this = unwrap_this(env, info) as? TextContent else { return nil }
-    return as_value(env!, this.textSize)
+    return as_value(env!, this.fontSize)
 }
 
-func set_text_textSize(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+func set_text_fontSize(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     guard let this = unwrap_this(env!, info!) as? TextContent else { return nil }
     guard let args = get_args(env, info), args.count == 1 else { return nil }
-    if let arg0 = args[0] as? Float { this.textSize = arg0 }
+    if let arg0 = args[0] as? Float { this.fontSize = arg0 }
     return nil
 }
 

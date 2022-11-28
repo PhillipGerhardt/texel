@@ -13,7 +13,7 @@ class TextContent: Content {
     var text: String { didSet { try? draw() } }
     var backgroundColor: simd_float4 = .zero { didSet { try? draw() } }
     var foregroundColor: simd_float4 = .one { didSet { try? draw() } }
-    var textSize: Float = 18 { didSet { try? draw() } }
+    var fontSize: Float = 18 { didSet { try? draw() } }
 
     init(text: String, size: simd_int2) throws {
         let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .bgra8Unorm, width: Int(size.x), height: Int(size.y), mipmapped: false)
@@ -48,7 +48,7 @@ class TextContent: Content {
         paragraphStyle.alignment = .center
         let attributes = [
             NSAttributedString.Key.paragraphStyle: paragraphStyle,
-            NSAttributedString.Key.font: NSFont.systemFont(ofSize: CGFloat(textSize)),
+            NSAttributedString.Key.font: NSFont.systemFont(ofSize: CGFloat(fontSize)),
             NSAttributedString.Key.foregroundColor: NSColor(red: CGFloat(foregroundColor.x), green: CGFloat(foregroundColor.y), blue: CGFloat(foregroundColor.z), alpha: CGFloat(foregroundColor.w)),
         ]
         let attrString = NSAttributedString(string: text, attributes: attributes)
