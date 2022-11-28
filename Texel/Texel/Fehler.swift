@@ -11,4 +11,6 @@ enum Fehler: Error {
     case CVMetalTextureCacheCreate
     case makeDefaultLibrary
     case makeDepthStencilState
+    case makeTexture
+    case CGContext
 }

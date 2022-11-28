@@ -41,12 +41,35 @@ Start a movie:
     l.content = c;
     global.gc();
 
+
+Show some image:
+
+    t = process._linkedBinding('texel');
+    l = t.Layer();
+    t.layers = [l];
+    l.size = t.size.map(v=>v/2)
+    l.position = t.size.map(v=>v/2);
+    c = t.Image('/System/Library/Desktop Pictures/Big Sur Graphic.heic');
+    l.content = c;
+    global.gc();
+
+
 Animate something:
 
     s = l.size; r = l.rotation;
     l.size = t.Animation(s.map(v=>v/2));
     l.rotation = t.Animation(r + 3.1415)
     setTimeout(()=>{l.size = s; l.rotation = r;}, 2000);
+
+Make text:
+
+    t = process._linkedBinding('texel');
+    l = t.Layer();
+    t.layers = [l];
+    l.size = t.size.map(v=>v/2)
+    l.position = t.size.map(v=>v/2);
+    c = t.Text("Hello World");
+    l.content = c;
 
 ## Run demos
 
