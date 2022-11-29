@@ -19,6 +19,7 @@
 #include "node_snapshot_builder.h"
 
 namespace node {
+/* Fix Undefined symbols wheb linking. */
 const SnapshotData* SnapshotBuilder::GetEmbeddedSnapshotData() {
     return nullptr;
 }

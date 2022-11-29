@@ -8,6 +8,10 @@
 import Combine
 import QuartzCore
 
+/**
+ * Animation are keept alive by referencing self in the closure of the start method.
+ * Once their subscription to the NormalizedTimer is canceled they are freed (if not referenced elsewhere).
+ */
 class Animation {
 
     var dst: Any?
@@ -129,6 +133,9 @@ class ElapsedTimer: Publisher {
 
 }
 
+/**
+ * Output a value in the range of 0...1 during a set duration.
+ */
 class NormalizedTimer: Publisher {
     typealias Output = Float
     typealias Failure = Never

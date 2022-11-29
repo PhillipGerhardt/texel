@@ -14,6 +14,9 @@ import Dispatch
 let alignedUniformsSize = (MemoryLayout<Uniforms>.size      + 0xFF) & -0x100
 let alignedVerticesSize = (MemoryLayout<Vertex>.size * 4    + 0xFF) & -0x100
 
+/**
+ * Holds all metal ressources needed.
+ */
 class Engine {
 //    let colorPixelFormat: MTLPixelFormat = .bgra8Unorm
     let colorPixelFormat: MTLPixelFormat = .bgra10_xr
@@ -24,14 +27,19 @@ class Engine {
     var scene = Scene()
 
     let device: MTLDevice
+    /// Used by the ImageContent. No need to create a seperate one for each Image
     let textureLoader: MTKTextureLoader
+    /// Used by the MovieContent to convert CVImageBuffer to metal textures.
     var textureCache: CVMetalTextureCache!
 
+    /// Projection and view matrix
     var uniformsBuffer: MTLBuffer
+    /// Our one quad that is used to draw all layers and contents
     var verticesBuffer: MTLBuffer
     var uniforms: UnsafeMutablePointer<Uniforms>
     var vertices: UnsafeMutablePointer<Vertex>
 
+    /// Tell metal how our vertices are laid out
     var vertexDescriptor = MTLVertexDescriptor()
 
     let pipelineLayer: MTLRenderPipelineState
@@ -42,12 +50,17 @@ class Engine {
     let depthStencilDecrementState: MTLDepthStencilState
     let depthStencilTestState: MTLDepthStencilState
 
+    /// All metal views conneczs to issue a draw call
     let displayTick = PassthroughSubject<Void, Never>()
+    /// All animations connects to update their values
     let animationTick = PassthroughSubject<Void, Never>();
+    /// Movies connects to update their texures and push audio samples to the audio system
     let contentTick = PassthroughSubject<Void, Never>();
 
+    /// Used to block any ticks that are to fast
     let semaphore = DispatchSemaphore(value: 1)
 
+    /// Our "tick" generator
     let displayLink = DisplayLink()
 
     init() throws {
@@ -92,6 +105,7 @@ class Engine {
             pipelineDescriptor.depthAttachmentPixelFormat = depthStencilPixelFormat
             pipelineDescriptor.sampleCount = sampleCount
 
+            /// Blending should be pre-multiplied
             pipelineDescriptor.colorAttachments[0].pixelFormat                  = colorPixelFormat
             pipelineDescriptor.colorAttachments[0].isBlendingEnabled            = true
             pipelineDescriptor.colorAttachments[0].rgbBlendOperation            = .add
@@ -146,11 +160,9 @@ class Engine {
 
         displayLink.start {
             if self.semaphore.wait(timeout: .now()) == .timedOut { return }
-
             Task {
                 await self.scene.interpretEvents() // user input update
             }
-
             self.displayTick.send() // when nothing has changed this is not neccesarry
             self.animationTick.send() // animations update
             self.contentTick.send() // content update
