@@ -5,10 +5,18 @@
 //  Created by Phillip Gerhardt on 27.11.22.
 //
 
+/**
+ * If JS garbage collector finalizes our wrapped objects we need to decrease the retain count
+ * of the wrapped object. ARC will do that for us after we called takeRetainedValue().
+ */
 func object_finalizer(_ env: napi_env?, _ finalize_data: UnsafeMutableRawPointer?, _ finalize_hint: UnsafeMutableRawPointer?) {
     let _ = Unmanaged<AnyObject>.fromOpaque(finalize_data!).takeRetainedValue()
 }
 
+/**
+ * Wrap a Swift type into a JS object.
+ * The concrete type is stored as a tag in the JS object. The tag is used later to check if we are unwrapping the correct type.
+ */
 func wrap<T: AnyObject>(_ env: napi_env?, _ t: T) -> napi_value?
 {
     var result: napi_value?
@@ -29,6 +37,9 @@ func wrap<T: AnyObject>(_ env: napi_env?, _ t: T) -> napi_value?
     return result
 }
 
+/**
+ * Unrap a Swift type from a JS object.
+ */
 func unwrap_this(_ env: napi_env?, _ info: napi_callback_info?) -> AnyObject? {
     var this: napi_value?
     guard napi_get_cb_info(env!, info!, nil, nil, &this, nil) == napi_ok else {
@@ -44,6 +55,11 @@ func unwrap_this(_ env: napi_env?, _ info: napi_callback_info?) -> AnyObject? {
     return t
 }
 
+/**
+ * Try to cast a JS to a Swift type.
+ * Will work only for types that has been wrapped before.
+ * If the type tag does not match the cast fails.
+ */
 func cast_to<T: AnyObject>(_ env: napi_env?, _ value: napi_value?) -> T?
 {
     var typeTag: napi_type_tag = napi_type_tag(lower: UInt64(bitPattern: Int64(ObjectIdentifier(T.self).hashValue)),
@@ -67,6 +83,9 @@ func cast_to<T: AnyObject>(_ env: napi_env?, _ value: napi_value?) -> T?
     return t
 }
 
+/**
+ * Try to cast a Swift array to a simd type.
+ */
 func as_simd(_ x: Any) -> Any? {
     if let x = x as? Float { return x }
     if let x = x as? [Float], x.count == 2 { return simd_float2(x[0], x[1]) }
@@ -81,6 +100,9 @@ func as_simd(_ x: Any) -> Any? {
     return nil
 }
 
+/**
+ * Convert a JS value to Swift.
+ */
 func as_any(_ env: napi_env?, _ val: napi_value) -> Any? {
 
     var string_size: size_t = 0
@@ -128,7 +150,12 @@ func as_any(_ env: napi_env?, _ val: napi_value) -> Any? {
     return nil
 }
 
+/**
+ * Convert a Swift type to a JS value.
+ */
 func as_value(_ env: napi_env?, _ t: Any) -> napi_value? {
+
+    /* Convert classes */
 
     if let t = t as? Layer, let val = wrap(env!, t) {
         napi_define_properties(env, val, layer_descriptors.count, layer_descriptors)
@@ -147,7 +174,9 @@ func as_value(_ env: napi_env?, _ t: Any) -> napi_value? {
         return val
     }
 
+    /* TODO: Convert Animation? */
 
+    /* Convert basic types */
 
     if let t = t as? Bool {
         var val: napi_value?
@@ -197,11 +226,17 @@ func as_value(_ env: napi_env?, _ t: Any) -> napi_value? {
         }
         return val
     }
+
+    /* Convert simd types to arrays */
+
     if let t = t as? simd_int2 { return as_value(env, [t.x, t.y]) }
     if let t = t as? simd_float2 { return as_value(env, [t.x, t.y]) }
     if let t = t as? simd_float3 { return as_value(env, [t.x, t.y, t.z]) }
     if let t = t as? simd_float4 { return as_value(env, [t.x, t.y, t.z, t.w]) }
     if let t = t as? simd_quatf { return as_value(env, [t.angle, [t.axis.x, t.axis.y, t.axis.z]]) }
+
+    /* Convert dictonary to JS object */
+
     if let t = t as? [String:Any] {
         var result: napi_value?
         guard napi_create_object(env!, &result) == napi_ok else {
@@ -217,6 +252,9 @@ func as_value(_ env: napi_env?, _ t: Any) -> napi_value? {
         }
         return result
     }
+
+    /* Convert arrays like the scene's layers */
+
     if let t = t as? [Any] {
         var result: napi_value?
         guard napi_create_array_with_length(env!, t.count, &result) == napi_ok else {
@@ -232,10 +270,14 @@ func as_value(_ env: napi_env?, _ t: Any) -> napi_value? {
         }
         return result
     }
+
     print("as_value: unsupported \(t)")
     return nil
 }
 
+/**
+ * Convert the callback parameters in napi_callback_info to Swift array.
+ */
 func get_args(_ env: napi_env?, _ info: napi_callback_info?) -> [Any]? {
     var argc: Int = 0
     guard napi_get_cb_info(env!, info!, &argc, nil, nil, nil) == napi_ok else {
@@ -274,4 +316,3 @@ func NodeStart() {
     let node_modules_path = scriptsURL.path.appending("/node_modules")
     MyNode_start(node_modules_path, Int32(argv.count), &argv)
 }
-

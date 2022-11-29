@@ -7,6 +7,9 @@
 
 import MetalKit
 
+/**
+ * Draw some text into a metal texture.
+ */
 class TextContent: Content {
     var size: simd_int2 = .zero
     var texture: MTLTexture?
@@ -29,6 +32,9 @@ class TextContent: Content {
     }
 
     func draw() throws {
+        /* NOP when texture have not yet been created. */
+        guard texture != nil else { return }
+
         guard let ctx = CGContext(data: nil,
                                   width: Int(size.x),
                                   height: Int(size.y),
@@ -61,7 +67,7 @@ class TextContent: Content {
         CTFrameDraw(frame, ctx)
         ctx.translateBy(x: 0, y: diff)
 
-        texture?.replace(region: MTLRegion(origin: .init(x: 0, y: 0, z: 0), size: .init(width: Int(size.x), height: Int(size.y), depth: 1)), mipmapLevel: 0, withBytes: ctx.data!, bytesPerRow: ctx.bytesPerRow)
+        self.texture?.replace(region: MTLRegion(origin: .init(x: 0, y: 0, z: 0), size: .init(width: Int(size.x), height: Int(size.y), depth: 1)), mipmapLevel: 0, withBytes: ctx.data!, bytesPerRow: ctx.bytesPerRow)
     }
 
     func configure(_ renderEncoder: MTLRenderCommandEncoder) -> Bool {

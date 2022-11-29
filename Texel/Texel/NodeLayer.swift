@@ -16,6 +16,7 @@ let layer_descriptors: [napi_property_descriptor] = [
     napi_property_descriptor(utf8name: strdup("contentScaling"), name: nil, method: nil, getter: get_layer_contentScaling, setter: set_layer_contentScaling, value: nil, attributes: napi_default_jsproperty, data: nil),
     napi_property_descriptor(utf8name: strdup("contentHorizontalAlignment"), name: nil, method: nil, getter: get_layer_contentHorizontalAlignment, setter: set_layer_contentHorizontalAlignment, value: nil, attributes: napi_default_jsproperty, data: nil),
     napi_property_descriptor(utf8name: strdup("contentVerticalAlignment"), name: nil, method: nil, getter: get_layer_contentVerticalAlignment, setter: set_layer_contentVerticalAlignment, value: nil, attributes: napi_default_jsproperty, data: nil),
+    napi_property_descriptor(utf8name: strdup("orientation"), name: nil, method: nil, getter: get_layer_orientation, setter: set_layer_orientation, value: nil, attributes: napi_default_jsproperty, data: nil),
     napi_property_descriptor(utf8name: strdup("rotation"), name: nil, method: nil, getter: get_layer_rotation, setter: set_layer_rotation, value: nil, attributes: napi_default_jsproperty, data: nil),
     napi_property_descriptor(utf8name: strdup("color"), name: nil, method: nil, getter: get_layer_color, setter: set_layer_color, value: nil, attributes: napi_default_jsproperty, data: nil),
     napi_property_descriptor(utf8name: strdup("contentColor"), name: nil, method: nil, getter: get_layer_contentColor, setter: set_layer_contentColor, value: nil, attributes: napi_default_jsproperty, data: nil),
@@ -152,6 +153,20 @@ func set_layer_contentVerticalAlignment(_ env: napi_env?, _ info: napi_callback_
     guard let val = args[0] as? String else { return nil }
     guard let val = VerticalAlignment(rawValue: val) else { return nil }
     this.contentVerticalAlignment = val
+    return nil
+}
+
+// MARK: - orientation
+
+func get_layer_orientation(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+    guard let this = unwrap_this(env!, info!) as? Layer else { return nil }
+    return as_value(env, this.orientation)
+}
+
+func set_layer_orientation(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+    guard let args = get_args(env, info), args.count == 1 else { return nil }
+    guard let this = unwrap_this(env!, info!) as? Layer else { return nil }
+    if let arg0 = as_simd(args[0]) as? simd_quatf { this.orientation = arg0 }
     return nil
 }
 

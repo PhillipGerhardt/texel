@@ -8,7 +8,7 @@
 import Combine
 
 /**
- *  thread safe list of input events
+ * Thread safe list of input events
  */
 actor EventsQueue {
     var events = [Event]()
@@ -23,6 +23,9 @@ actor EventsQueue {
     }
 }
 
+/**
+ * The scene ist just a collection of layers that are drawn.
+ */
 class Scene {
 
     let events = EventsQueue()

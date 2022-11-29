@@ -10,11 +10,14 @@ import ImageIO
 
 extension Engine {
 
+    /**
+     * Create a thumbnail of a file
+     */
     func saveThumbnail(of src: String, to dst: String, size: simd_float2) {
         let srcURL = URL(fileURLWithPath: src)
         let dstURL = URL(fileURLWithPath: dst)
         let req = QLThumbnailGenerator.Request(fileAt: srcURL, size: .init(width: CGFloat(size.x), height: CGFloat(size.y)), scale: 1, representationTypes: .lowQualityThumbnail)
-        let semaphore = DispatchSemaphore(value: 1)
+        let semaphore = DispatchSemaphore(value: 0)
         QLThumbnailGenerator.shared.generateBestRepresentation(for: req) { (rep, error) in
             defer { semaphore.signal() }
             guard let rep = rep, error == nil else { return }

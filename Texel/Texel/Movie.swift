@@ -9,6 +9,10 @@ import Metal
 import AVFoundation
 import Combine
 
+/**
+ * Play a movie.
+ * Can be set to loop and can also be muted.
+ */
 class MovieContent: Content {
 
     var size: simd_int2 = .zero
@@ -67,11 +71,6 @@ class MovieContent: Content {
         print("MovieContent.deinit")
         token?.cancel()
         reader.cancelReading()
-    }
-
-    func prepare() {
-        startTime = CACurrentMediaTime()
-        step()
     }
 
     func restart() throws {
@@ -176,6 +175,8 @@ class MovieContent: Content {
     var imageBuffers = [CVImageBuffer]()
     func publishVisual(_ sampleBuffer: CMSampleBuffer) throws {
         if let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
+            /*  Keep a reference to the imagebuffer to prevent reuse by the decoder
+                while it's metal texture is still needed for display. */
             self.imageBuffers.append(imageBuffer)
             while self.imageBuffers.count > 2 {
                 self.imageBuffers.removeFirst()

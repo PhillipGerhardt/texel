@@ -14,6 +14,9 @@ import MetalKit
 import simd
 import Combine
 
+/*
+ * Recursively render the scene's layer tree to the metal view
+ */
 class Renderer: NSObject, MTKViewDelegate {
 
     let mtkView: MTKView
@@ -88,10 +91,11 @@ class Renderer: NSObject, MTKViewDelegate {
     func render(_ layers: [Layer], transform: simd_float4x4, renderEncoder: MTLRenderCommandEncoder) {
         for layer in layers {
 
-            // Make a copy. layer.clip can change while rendering the layer tree.
+            /** Make a copy. layer.clip can change while rendering the layer tree.
+                That would result in an exception when decrementing the stencil value */
             let clip = layer.clip
 
-            // write stencil reference value
+            /** Write stencil reference value */
             func stencil(_ depthStencilState: MTLDepthStencilState) {
                 renderEncoder.setDepthStencilState(depthStencilState)
                 renderEncoder.setRenderPipelineState(engine.pipelineStencil)
@@ -142,8 +146,11 @@ class Renderer: NSObject, MTKViewDelegate {
         let w = Float(size.width)
         let h = Float(size.height)
         let projectionMatrix = matrix_ortho_right_hand(left: 0, right: w, bottom: 0, top: h, nearZ: -1, farZ: 1)
+//        let projectionMatrix = matrix_perspective_right_hand(fovyRadians: Float.pi/2, aspectRatio: w/h, nearZ: 1, farZ: h)
+//        let viewMatrix = matrix_identity_float4x4.translated(simd_float3(-w/2,-h/2,-h/2))
         engine.scene.size = simd_float2(w, h)
         engine.scene.projection = projectionMatrix
         engine.uniforms[0].projectionMatrix = projectionMatrix
+//        engine.uniforms[0].viewMatrix = viewMatrix
     }
 }

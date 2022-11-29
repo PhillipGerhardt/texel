@@ -49,7 +49,6 @@ typedef struct
 {
     constexpr sampler textureSampler(filter::linear, mip_filter::linear);
     float4 rgba = texture.sample(textureSampler, in.texCoord);
-//    rgba.a = 1; // for RFB
     return rgba * model.color;
 }
 

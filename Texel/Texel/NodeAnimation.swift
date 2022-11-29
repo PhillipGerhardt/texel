@@ -5,7 +5,6 @@
 //  Created by Phillip Gerhardt on 27.11.22.
 //
 
-
 func make_animation(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value?
 {
     guard let args = get_args(env, info), args.count >= 1 else { return nil }

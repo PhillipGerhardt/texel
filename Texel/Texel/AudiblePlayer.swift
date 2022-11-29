@@ -5,7 +5,6 @@
 //  Created by Phillip Gerhardt on 27.11.22.
 //
 
-
 import AVFoundation
 
 class AudibleSystem {
@@ -13,6 +12,7 @@ class AudibleSystem {
     let audioEngine = AVAudioEngine()
     let playerNode = AVAudioPlayerNode()
     init() {
+        /* Need something attached else it will not start. Just attach one playernode that does nothing. */
         audioEngine.attach(playerNode)
         audioEngine.connect(playerNode, to: audioEngine.mainMixerNode, format: nil)
         try? audioEngine.start()
@@ -22,6 +22,7 @@ class AudibleSystem {
 let audibleSystem = AudibleSystem()
 
 class AudiblePlayer {
+
     var playerNode: AVAudioPlayerNode?
     var mixerNode: AVAudioMixerNode?
     var volume: Float = 1 {
@@ -50,6 +51,8 @@ class AudiblePlayer {
         let mutableAudioBufferList = pcmBuffer.mutableAudioBufferList
         CMSampleBufferCopyPCMDataIntoAudioBufferList(sampleBuffer, at: 0, frameCount: Int32(numSamples), into: mutableAudioBufferList)
         if playerNode == nil {
+            /** When starting multiple videos almost simultaneously i got crashes when adding nodes
+                to the audiosystem. This fixed it for me. */
             _ = audibleSystem.semaphore.wait(timeout: .distantFuture)
             defer { audibleSystem.semaphore.signal() }
 
@@ -60,6 +63,7 @@ class AudiblePlayer {
             mixer.volume = volume
             audibleSystem.audioEngine.attach(node)
             audibleSystem.audioEngine.attach(mixer)
+            /* Our Mixernode will take care of any audio conversion. */
             audibleSystem.audioEngine.connect(mixer, to: audibleSystem.audioEngine.mainMixerNode, format: audioFormat)
             audibleSystem.audioEngine.connect(node, to: mixer, format: audioFormat)
             node.play()

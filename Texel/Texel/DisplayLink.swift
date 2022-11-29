@@ -7,7 +7,12 @@
 
 import CoreVideo
 
+/**
+ * The displaylink should tick with 60hz or whatever the refresh rate of our displays are.
+ * It is used to drive the rendering, to update the animations and to update the video frames of the movies.
+ */
 public final class DisplayLink {
+
     var displayLink: CVDisplayLink!
     var callback: (() -> Void)?
 

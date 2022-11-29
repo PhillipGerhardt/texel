@@ -8,6 +8,9 @@
 
 import MetalKit
 
+/**
+ * Show an image.
+ */
 class ImageContent: Content {
     var size: simd_int2 = .zero
     var texture: MTLTexture?
@@ -31,7 +34,7 @@ class ImageContent: Content {
                     // extend texture with a size property?
                 }
             } catch {
-                print(error)
+                print("error loading \(url):", error)
             }
         }
     }

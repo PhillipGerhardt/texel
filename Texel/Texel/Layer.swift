@@ -8,21 +8,31 @@
 import Combine
 
 /**
+ * The scene consists of layers and their sublayers.
  * @Published properties can be animated.
  */
-
 class Layer {
 
     var sublayers = [Layer]()
-    var clip: Bool = false // clip content and childlayers to this layer size
+    /// Clip content and childlayers to this layer size
+    var clip: Bool = false
+    /// Draw the layer
     var draw: Bool = true
+    /// Position of the layer
     @Published var position = simd_float2.zero
+    /// Size of the layer
     @Published var size = simd_float2.one
+    /// The orientation of the layer. Used to rotate the layer when the user clicks them with the mouse
     @Published var orientation = simd_quatf(angle: 0, axis: simd_float3(0,0,1))
-    @Published var rotation: Float = 0 // convenience. easier than orientation
-    @Published var pivot = simd_float2(0.5, 0.5) // maybe rename to anchorPoint
-    @Published var color = simd_float4(0.0, 0.5, 0.5, 1.0) // teal
+    /// Rotation about z axis. Exported to js
+    @Published var rotation: Float = 0
+    /// The pivot or anchorpoint. Rotation and position is calculated from that point.
+    @Published var pivot = simd_float2(0.5, 0.5)
+    /// Color used to draw the layer. Default: teal
+    @Published var color = simd_float4(0.0, 0.5, 0.5, 1.0)
+    /// Color that is multiplied with the color of the contents textures pixels. Can be used to fade the content in and out
     @Published var contentColor = simd_float4.one
+    /// Control the volume of the content. Fade content in and out
     @Published var contentVolume: Float = 1
     var content: Content? {
         didSet {
@@ -37,10 +47,14 @@ class Layer {
         }
     }
     var contentVolumeToken: AnyCancellable?
+    /// Control how the content is laid out in the layer
     var contentScaling: ScaleMode = .fit
+    /// Control the horizontal alignment of the content in the layer
     var contentHorizontalAlignment: HorizontalAlignment = .center
+    /// Control the vertical alignment of the content in the layer
     var contentVerticalAlignment: VerticalAlignment = .center
 
+    /// Size of content after applying the contentScaling
     var contentSize: simd_float2 {
         get {
             if let content = content {

@@ -9,8 +9,10 @@ import AppKit
 import simd
 import Metal
 
-// protocol or base class?
-
+/**
+ * Content is put into a layer and displayed there.
+ * TODO: Protocol or base class?
+*/
 protocol Content: AnyObject {
     var size: simd_int2 { get set }
     var volume: Float { get set }
