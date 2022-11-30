@@ -28,55 +28,59 @@ Connect to repl:
 
     scripts/node_modules/net-repl/bin/repl.js /tmp/texel.repl
 
-Start a movie:
+Make a single layer:
 
-    t = process._linkedBinding('texel');
-    l = t.Layer();
-    t.layers = [l];
-    l.size = t.size.map(v=>v/2)
-    l.position = t.size.map(v=>v/2);
-    file = '/path/to/movie.mov';
-    c = t.Movie(file, true, false);
-    c.start();
-    l.content = c;
-    global.gc();
-
-
-Show some image:
-
-    t = process._linkedBinding('texel');
-    l = t.Layer();
-    t.layers = [l];
-    l.size = t.size.map(v=>v/2)
-    l.position = t.size.map(v=>v/2);
-    c = t.Image('/System/Library/Desktop Pictures/Big Sur Graphic.heic');
-    l.content = c;
-    global.gc();
-
+    layer = texel.Layer();
+    texel.layers = [layer];
+    layer.size = texel.size.map(v=>v/2)
+    layer.position = texel.size.map(v=>v/2);
 
 Animate something:
 
-    s = l.size; r = l.rotation;
-    l.size = t.Animation(s.map(v=>v/2));
-    l.rotation = t.Animation(r + 3.1415)
-    setTimeout(()=>{l.size = s; l.rotation = r;}, 2000);
+    size = layer.size; rotation = layer.rotation;
+    layer.size = texel.Animation(size.map(v=>v/2));
+    layer.rotation = texel.Animation(rotation + 3.1415)
+    setTimeout(()=>{layer.size = size; layer.rotation = rotation;}, 2000);
+
+Start a movie:
+
+    layer = texel.Layer();
+    texel.layers = [layer];
+    layer.size = texel.size.map(v=>v/2)
+    layer.position = texel.size.map(v=>v/2);
+    file = 'path/to/file.mov';
+    movie = texel.Movie(file, true, false);
+    movie.start();
+    layer.content = movie;
+
+To stop the movie we need to unreference all variables and start the javascript garbage collector:
+
+    layer = undefined;
+    movie = undefined;
+    gc();
+
+Show some image:
+
+    layer = texel.Layer();
+    texel.layers = [layer];
+    layer.size = texel.size.map(v=>v/2)
+    layer.position = texel.size.map(v=>v/2);
+    image = texel.Image('/System/Library/Desktop Pictures/Big Sur Graphic.heic');
+    layer.content = image;
 
 Make text:
 
-    t = process._linkedBinding('texel');
-    l = t.Layer();
-    t.layers = [l];
-    l.size = t.size.map(v=>v/2)
-    l.position = t.size.map(v=>v/2);
-    c = t.Text("Hello World");
-    l.content = c;
+    layer = texel.Layer();
+    texel.layers = [layer];
+    layer.size = texel.size.map(v=>v/2)
+    layer.position = texel.size.map(v=>v/2);
+    text = texel.Text("Hello World");
+    layer.content = text;
 
 ## Run demos
 
-Adjust the path to your content in "scripts/txl.js"
-in get_movies() and get_images().
-Otherwise files from your Movies and Pictures folders
-and their subfolders are used.
+The demos use assets files from your "Movies" and "Pictures" directories.
+Adjust that to your needs.
 
     eval(fs.readFileSync('animations.js')+'');
     eval(fs.readFileSync('movies.js')+'');
@@ -84,4 +88,5 @@ and their subfolders are used.
     eval(fs.readFileSync('grid_exchange.js')+'');
     eval(fs.readFileSync('videoplayer.js')+'');
     eval(fs.readFileSync('alignment_fitting.js')+'');
+    eval(fs.readFileSync('choose_animation.js')+'');
 

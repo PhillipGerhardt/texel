@@ -24,6 +24,10 @@ var node_function: napi_threadsafe_function_call_js? = { env, tsfn_cb, context, 
     var res: napi_value?
     guard napi_run_script(env, s, &res) == napi_ok else {
         print("napi_run_script failed")
+        if let res {
+            let result = as_any(env, res)
+            print("result", result)
+        }
         return
     }
 }

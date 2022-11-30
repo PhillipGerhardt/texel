@@ -51,22 +51,36 @@ function make(files) {
 
 t.onKeyDown = (keyCode) => {
     let idx = n * py + px;
-    t.layers[idx].draw = false;
-    if (keyCode == 125) /* down */ { py -= 1; }
-    if (keyCode == 126) /* up */ { py += 1; }
-    if (keyCode == 123) /* left */ { px -= 1; }
-    if (keyCode == 124) /* right */ { px += 1; }
-    if (py == -1) { py = n -1; }
-    if (py == n) { py = 0; }
-    if (px == -1) { px = n - 1; }
-    if (px == n) { px = 0; }
-    idx = n * py + px;
-    t.layers[idx].draw = true;
+    let layers = t.layers;
+
+    if (visible && keyCode != 49) {
+        if (keyCode == 123) /* left */ { position -= 0.1; }
+        if (keyCode == 124) /* right */ { position += 0.1; }
+        if (position > 1) { position = position - 1; }
+        if (position < 0) { position = 1 - position; }
+        console.log('position', position);
+        layers[n*n*2].content.seek(position);
+    }
+
+    if (!visible) {
+        t.layers[idx].draw = false;
+        if (keyCode == 125) /* down */ { py -= 1; }
+        if (keyCode == 126) /* up */ { py += 1; }
+        if (keyCode == 123) /* left */ { px -= 1; }
+        if (keyCode == 124) /* right */ { px += 1; }
+        if (py == -1) { py = n -1; }
+        if (py == n) { py = 0; }
+        if (px == -1) { px = n - 1; }
+        if (px == n) { px = 0; }
+        idx = n * py + px;
+        t.layers[idx].draw = true;
+    }
+
     if (keyCode == 49) /* space */ {
         if (inTransition) { return; }
-        let layers = t.layers;
 
         if (layers.length > n*n*2) {
+            console.log('fadeout');
             inTransition = true;
             layers[n*n*2].contentVolume = t.Animation(0);
             layers[n*n*2].contentColor = t.Animation([0,0,0,0]);
@@ -75,11 +89,13 @@ t.onKeyDown = (keyCode) => {
                 t.layers = layers;
                 global.gc();
                 inTransition = false;
+                visible = false;
             }, 1000);
             return;
         }
 
         if (idx < files.length) {
+            console.log('fadein');
             let l = t.Layer();
             layers.push(l);
             l.draw = false;
@@ -95,6 +111,7 @@ t.onKeyDown = (keyCode) => {
             layers[n*n*2].contentColor = t.Animation([1,1,1,1]);
             t.layers = layers;
             inTransition = true;
+            visible = true;
             setTimeout(()=>{
                 inTransition = false;
             }, 1000);
@@ -106,8 +123,11 @@ let n = 0;
 let px = 0;
 let py = 0;
 let inTransition = false;
+let visible = false;
+let position = 0;
 
-let files = txl.get_movies();
+let movieDir = path.join(os.homedir(), 'Movies');
+let files = txl.get_movies(movieDir);
 for (let i = 0; i < files.length; ++i) {
     t.makeThumbnail(files[i], path.join('/tmp', i + '.png'));
 }

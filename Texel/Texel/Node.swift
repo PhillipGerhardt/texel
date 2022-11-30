@@ -235,7 +235,7 @@ func as_value(_ env: napi_env?, _ t: Any) -> napi_value? {
     if let t = t as? simd_float4 { return as_value(env, [t.x, t.y, t.z, t.w]) }
     if let t = t as? simd_quatf { return as_value(env, [t.angle, [t.axis.x, t.axis.y, t.axis.z]]) }
 
-    /* Convert dictonary to JS object */
+    /* Convert dictionary to JS object */
 
     if let t = t as? [String:Any] {
         var result: napi_value?
@@ -311,7 +311,7 @@ func NodeStart() {
     mynode_create_addon = node_create_addon
     guard let scriptsURL = Bundle.main.url(forResource: "scripts", withExtension: nil) else { return }
     FileManager.default.changeCurrentDirectoryPath(scriptsURL.path)
-    let args = ["node", "--expose-gc", "index.js"]
+    let args = ["node", "--expose-gc", "--trace-deprecation", "index.js"]
     var argv = args.map{strdup($0)!}
     let node_modules_path = scriptsURL.path.appending("/node_modules")
     MyNode_start(node_modules_path, Int32(argv.count), &argv)
