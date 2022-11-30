@@ -2,7 +2,8 @@
 
 const repl = require('net-repl');
 
-// const server = repl.createServer().listen(1337);
+global.texel = process._linkedBinding('texel');
+
 var options = {
     prompt: 'texel> ',
     deleteSocketOnStart: true

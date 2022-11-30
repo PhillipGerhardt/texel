@@ -30,16 +30,23 @@ function step() {
     while (layers.length > 2) { layers.shift(); }
     t.layers = layers;
     let ad = 1;
-    let at = 'linear';
+    let at = 'outQuad';
+    let left = [- t.size[0], t.size[1]/2];
+    let center = t.size.map(v=>v/2);
+    let right = [2 * t.size[0], t.size[1]/2];
+    l.position = right;
     if (layers.length == 2) {
         layers[0].contentColor = t.Animation([0,0,0,0], ad, at);
         layers[0].contentVolume = t.Animation(0, ad, at);
+        layers[0].position = t.Animation(left, ad, at);
         layers[1].contentColor = t.Animation([1,1,1,1], ad, at);
         layers[1].contentVolume = t.Animation(1, ad, at);
+        layers[1].position = t.Animation(center, ad, at);
     }
     else {
         layers[0].contentColor = t.Animation([1,1,1,1], ad, at);
         layers[0].contentVolume = t.Animation(1, ad, at);
+        layers[0].position = t.Animation(center, ad, at);
     }
     global.gc();
 }
@@ -57,7 +64,11 @@ t.onKeyDown = keyCode => {
 };
 
 let index = 0;
-let files = txl.get_assets();
+let movieDir = path.join(os.homedir(), 'Movies');
+let imageDir = path.join(os.homedir(), 'Pictures');
+let images = txl.get_images(imageDir);
+let movies = txl.get_movies(movieDir);
+let files = images.concat(movies);
 txl.shuffle(files);
 index = 0;
 t.layers = [];

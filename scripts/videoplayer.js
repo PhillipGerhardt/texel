@@ -75,13 +75,6 @@ function start() {
     layer.content.start();
 }
 
-let files = txl.get_movies();
-let index = 0;
-let position = 0;
-let direction = 1;
-
-t.layers = [];
-step();
 t.onKeyDown = keyCode => { 
     console.log(keyCode);
     if (keyCode == 125) { // down
@@ -116,6 +109,15 @@ t.onKeyDown = keyCode => {
     if (keyCode == 123 || keyCode == 124) { seek(); }
 
 };
+
+let movieDir = path.join(os.homedir(), 'Movies');
+let files = txl.get_movies(movieDir);
+let index = 0;
+let position = 0;
+let direction = 1;
+
+t.layers = [];
+step();
 
 console.log('use up and down arrow to choose a video');
 console.log('use left and right to seek');

@@ -54,7 +54,11 @@ function step() {
     ++index;
 }
 
-files = txl.get_assets();
+let movieDir = path.join(os.homedir(), 'Movies');
+let movies = txl.get_movies(movieDir);
+let imageDir = path.join(os.homedir(), 'Pictures');
+let images = txl.get_images(imageDir);
+let files = images.concat(movies);
 txl.shuffle(files);
 
 t.layers = [];

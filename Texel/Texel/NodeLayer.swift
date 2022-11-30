@@ -60,6 +60,8 @@ func set_layer_position(_ env: napi_env?, _ info: napi_callback_info?) -> napi_v
     guard let this = unwrap_this(env!, info!) as? Layer else { return nil }
     guard let args = get_args(env, info), args.count == 1 else { return nil }
     if let arg0 = args[0] as? Animation { arg0.start(src: this.position, target: &this.$position) }
+//    if let arg0 = as_simd(args[0]) as? simd_float2 { this.position = simd_float3(arg0.x, arg0.y, 0) }
+//    if let arg0 = as_simd(args[0]) as? simd_float3 { this.position = arg0 }
     if let arg0 = as_simd(args[0]) as? simd_float2 { this.position = arg0 }
     return nil
 }
@@ -167,6 +169,7 @@ func set_layer_orientation(_ env: napi_env?, _ info: napi_callback_info?) -> nap
     guard let args = get_args(env, info), args.count == 1 else { return nil }
     guard let this = unwrap_this(env!, info!) as? Layer else { return nil }
     if let arg0 = as_simd(args[0]) as? simd_quatf { this.orientation = arg0 }
+    if let arg0 = args[0] as? Animation { arg0.start(src: this.orientation, target: &this.$orientation) }
     return nil
 }
 

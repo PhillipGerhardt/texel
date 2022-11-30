@@ -146,11 +146,12 @@ class Renderer: NSObject, MTKViewDelegate {
         let w = Float(size.width)
         let h = Float(size.height)
         let projectionMatrix = matrix_ortho_right_hand(left: 0, right: w, bottom: 0, top: h, nearZ: -1, farZ: 1)
+        let viewMatrix = matrix_identity_float4x4
 //        let projectionMatrix = matrix_perspective_right_hand(fovyRadians: Float.pi/2, aspectRatio: w/h, nearZ: 1, farZ: h)
 //        let viewMatrix = matrix_identity_float4x4.translated(simd_float3(-w/2,-h/2,-h/2))
         engine.scene.size = simd_float2(w, h)
         engine.scene.projection = projectionMatrix
         engine.uniforms[0].projectionMatrix = projectionMatrix
-//        engine.uniforms[0].viewMatrix = viewMatrix
+        engine.uniforms[0].viewMatrix = viewMatrix
     }
 }

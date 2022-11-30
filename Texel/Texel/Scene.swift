@@ -24,7 +24,7 @@ actor EventsQueue {
 }
 
 /**
- * The scene ist just a collection of layers that are drawn.
+ * The scene is just a collection of layers that are drawn.
  */
 class Scene {
 
@@ -105,8 +105,7 @@ class Scene {
                 // drag layers around
                 if evt.event.modifierFlags.contains([.control]) {
                     // set random color to layer
-                    if evt.event.type == .leftMouseDown,
-                       let layer = hitLayer {
+                    if evt.event.type == .leftMouseDown {
                         let r = Float.random(in: 0...1)
                         let g = Float.random(in: 0...1)
                         let b = Float.random(in: 0...1)

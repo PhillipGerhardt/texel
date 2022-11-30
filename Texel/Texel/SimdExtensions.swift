@@ -20,29 +20,15 @@ extension simd_int2 {
 
 }
 
+extension simd_float3 {
+
+    static func -(lhs: simd_float3, rhs: simd_float2) -> simd_float3 {
+        simd_float3(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z)
+    }
+
+}
+
 extension simd_float4x4 {
-
-    func scaled(_ scale: simd_float3) -> simd_float4x4 {
-        let rows = [
-            simd_float4(scale.x,      0,       0, 0),
-            simd_float4(     0, scale.y,       0, 0),
-            simd_float4(     0,       0, scale.z, 0),
-            simd_float4(     0,       0,       0, 1)
-        ]
-        let m = float4x4(rows: rows)
-        return m * self
-    }
-
-    func scaled(_ scale: simd_float2) -> simd_float4x4 {
-        let rows = [
-            simd_float4(scale.x,      0, 0, 0),
-            simd_float4(     0, scale.y, 0, 0),
-            simd_float4(     0,       0, 1, 0),
-            simd_float4(     0,       0, 0, 1)
-        ]
-        let m = float4x4(rows: rows)
-        return m * self
-    }
 
     func translated(_ translation: simd_float3) -> simd_float4x4 {
         var m = self
@@ -59,15 +45,5 @@ extension simd_float4x4 {
         return m
     }
 
-    func translation() -> simd_float3 {
-        return simd_float3(self.columns.3.x, self.columns.3.y, self.columns.3.z)
-    }
-
-    func rotation_scale() -> simd_float4x4 {
-        var m = self
-        m.columns.3.x = 0
-        m.columns.3.y = 0
-        return m
-    }
 
 }

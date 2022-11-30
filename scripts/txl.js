@@ -4,13 +4,13 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
-function get_files(dir)
+function get_files(dir, recursive)
 {
     let files = [];
     let paths = fs.readdirSync(dir).map( f => path.join(dir, f ));
     for (let path of paths) {
-        if (fs.lstatSync(path).isDirectory()) {
-            files = files.concat(get_files(path));        
+        if (fs.lstatSync(path).isDirectory() && recursive) {
+            files = files.concat(get_files(path, recursive));
         }
     } 
     files = files.concat(paths);
@@ -49,18 +49,20 @@ function is_asset(file)
     return is_movie(file) || is_image(file);
 }
 
-function get_movies()
+function get_movies(directory, recursive)
 {
-    let files = get_files(path.join(os.homedir(), 'Movies'));
+    let dir = directory ? directory : path.join(os.homedir(), 'Movies');
+    let files = get_files(dir, recursive);
     files = files.filter(file => {
         return is_movie(file);
     });
     return files;
 };
 
-function get_images()
+function get_images(directory, recursive)
 {
-    let files = get_files(path.join(os.homedir(), 'Pictures'));
+    let dir = directory ? directory : path.join(os.homedir(), 'Pictures');
+    let files = get_files(dir, recursive);
     files = files.filter(file => {
         return is_image(file);
     });
