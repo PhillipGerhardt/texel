@@ -42,6 +42,9 @@ class Engine {
     /// Tell metal how our vertices are laid out
     var vertexDescriptor = MTLVertexDescriptor()
 
+    let library: MTLLibrary
+    let pipelineDescriptor: MTLRenderPipelineDescriptor
+
     let pipelineLayer: MTLRenderPipelineState
     let pipelineContent: MTLRenderPipelineState
     let pipelineStencil: MTLRenderPipelineState
@@ -88,6 +91,7 @@ class Engine {
             guard let library = device.makeDefaultLibrary() else {
                 throw Fehler.makeDefaultLibrary
             }
+            self.library = library
 
             vertexDescriptor.attributes[VertexAttribute.position.rawValue].bufferIndex = BufferIndex.vertices.rawValue
             vertexDescriptor.attributes[VertexAttribute.position.rawValue].format = MTLVertexFormat.float3
@@ -99,7 +103,7 @@ class Engine {
             vertexDescriptor.layouts[BufferIndex.vertices.rawValue].stepRate = 1
             vertexDescriptor.layouts[BufferIndex.vertices.rawValue].stepFunction = MTLVertexStepFunction.perVertex
 
-            let pipelineDescriptor = MTLRenderPipelineDescriptor()
+            pipelineDescriptor = MTLRenderPipelineDescriptor()
             pipelineDescriptor.vertexDescriptor = vertexDescriptor
             pipelineDescriptor.stencilAttachmentPixelFormat = depthStencilPixelFormat
             pipelineDescriptor.depthAttachmentPixelFormat = depthStencilPixelFormat

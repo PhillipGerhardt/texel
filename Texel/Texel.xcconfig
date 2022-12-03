@@ -11,7 +11,7 @@
 SWIFT_OBJC_BRIDGING_HEADER = Texel/Bridging-Header.h
 
 NODE_LIBS = -lbase64 -lbase64_neon64 -lbrotli -lcares -lgtest -lgtest_main -lhistogram -licudata -licui18n -licutools -licuucx -lllhttp -lnghttp2 -lnghttp3 -lngtcp2 -lnode -lopenssl -ltorque_base -luv -luvwasi -lv8_base_without_compiler -lv8_compiler -lv8_init -lv8_initializers -lv8_libbase -lv8_libplatform -lv8_snapshot -lv8_zlib -lzlib
-NODE_HEADER_PATH = ../externals/node/src /Users/pgerhardt/src/github.com/node/deps/v8/include ../externals/node/deps/uv/include
+NODE_HEADER_PATH = ../externals/node/src ../externals/node/deps/v8/include ../externals/node/deps/uv/include
 NODE_LIBRARY_PATH = ../externals/node/out/Release
 
 LIBRARY_SEARCH_PATHS = $(NODE_LIBRARY_PATH)

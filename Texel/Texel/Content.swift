@@ -20,6 +20,7 @@ protocol Content: AnyObject {
     func stop() // or stopped?
     func seek(to position: Float) -> Void
     func configure(_ renderEncoder: MTLRenderCommandEncoder) -> Bool
+    func onEvent(_ event: NSEvent, at point: simd_float2) -> Void
 }
 
 extension Content {
@@ -29,4 +30,5 @@ extension Content {
     func stop() {}
     func seek(to position: Float) {}
     func configure(_ renderEncoder: MTLRenderCommandEncoder) -> Bool { false }
+    func onEvent(_ event: NSEvent, at point: simd_float2) -> Void {}
 }

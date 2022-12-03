@@ -43,18 +43,23 @@ Animate something:
     setTimeout(()=>{layer.size = size; layer.rotation = rotation;}, 2000);
 
 Start a movie:
+Seek to a position by clicking on it.
 
     layer = texel.Layer();
     texel.layers = [layer];
-    layer.size = texel.size.map(v=>v/2)
+    layer.size = texel.size.map(v=>v*0.9)
     layer.position = texel.size.map(v=>v/2);
-    file = 'path/to/file.mov';
-    movie = texel.Movie(file, true, false);
+    files = texel.contentsOfDirectory(path.join(os.homedir(), 'Movies')).filter(v=>texel.isMovie(v)).filter(v=>texel.canReadAsset(v))
+    file = texel.shuffle(files)[0];
+    console.log(file); // make sure it plays in quicktime
+    movie = texel.Movie(file, true, false); // loop = true, muted = false
     movie.start();
     layer.content = movie;
+    gc();
 
 To stop the movie we need to unreference all variables and start the javascript garbage collector:
 
+    texel.layers = [];
     layer = undefined;
     movie = undefined;
     gc();
@@ -63,7 +68,7 @@ Show some image:
 
     layer = texel.Layer();
     texel.layers = [layer];
-    layer.size = texel.size.map(v=>v/2)
+    layer.size = texel.size.map(v=>v*0.6)
     layer.position = texel.size.map(v=>v/2);
     image = texel.Image('/System/Library/Desktop Pictures/Big Sur Graphic.heic');
     layer.content = image;
@@ -79,7 +84,7 @@ Make text:
 
 ## Run demos
 
-The demos use assets files from your "Movies" and "Pictures" directories.
+The demos use asset files from your "Movies" and "Pictures" directories.
 Adjust that to your needs.
 
     eval(fs.readFileSync('animations.js')+'');
@@ -89,4 +94,9 @@ Adjust that to your needs.
     eval(fs.readFileSync('videoplayer.js')+'');
     eval(fs.readFileSync('alignment_fitting.js')+'');
     eval(fs.readFileSync('choose_animation.js')+'');
+    eval(fs.readFileSync('fragment_metaball.js')+'');
+    eval(fs.readFileSync('fragment_hit.js')+'');
+    eval(fs.readFileSync('fragment_pixelate.js')+'');
+    eval(fs.readFileSync('fragment_combine_textures.js')+'');
+    eval(fs.readFileSync('fragment_adjust_lod.js')+'');
 

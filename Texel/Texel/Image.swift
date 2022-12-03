@@ -11,7 +11,7 @@ import MetalKit
 /**
  * Show an image.
  */
-class ImageContent: Content {
+class ImageContent: Content, TextureContent {
     var size: simd_int2 = .zero
     var texture: MTLTexture?
 
