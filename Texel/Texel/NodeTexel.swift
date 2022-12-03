@@ -7,6 +7,8 @@
 
 import AppKit.NSApplication
 import Dispatch
+import UniformTypeIdentifiers
+import AVFoundation
 
 let texel_descriptors: [napi_property_descriptor] = [
     napi_property_descriptor(utf8name: strdup("layers"), name: nil, method: nil, getter: get_layers, setter: set_layers, value: nil, attributes: napi_default_jsproperty, data: nil),
@@ -15,12 +17,18 @@ let texel_descriptors: [napi_property_descriptor] = [
     napi_property_descriptor(utf8name: strdup("quit"), name: nil, method: quit, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("makeThumbnail"), name: nil, method: make_thumbnail, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("enums"), name: nil, method: enums, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("shuffle"), name: nil, method: shuffle, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("contentsOfDirectory"), name: nil, method: contents_of_directory, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("isMovie"), name: nil, method: is_movie, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("isImage"), name: nil, method: is_image, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("canReadAsset"), name: nil, method: can_read_asset, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
 
     napi_property_descriptor(utf8name: strdup("Animation"), name: nil, method: make_animation, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("Layer"), name: nil, method: make_layer, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("Image"), name: nil, method: make_image, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("Movie"), name: nil, method: make_movie, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("Text"), name: nil, method: make_text, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("Fragment"), name: nil, method: make_fragment, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
 ]
 
 // MARK: - layers
@@ -86,3 +94,79 @@ func enums(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     return as_value(env, result)
 }
 
+// MARK: - shuffle
+
+func shuffle(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+    guard let args = get_args(env, info), args.count == 1 else { return nil }
+    guard var arg0 = args[0] as? [Any] else { return nil }
+    arg0.shuffle()
+    return as_value(env, arg0)
+}
+
+// - MARK - contents_of_directory
+
+func contents_of_directory(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+    guard let args = get_args(env, info), args.count >= 1 else { return nil }
+    guard let arg0 = args[0] as? String else { return nil }
+    var arg1 = false
+    if args.count > 1, let arg = args[1] as? Bool { arg1 = arg }
+
+    var urls = [URL]()
+    let url = URL(fileURLWithPath: arg0)
+    var options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles, .skipsPackageDescendants]
+    if !arg1 { options.insert(.skipsSubdirectoryDescendants) }
+
+    if let enumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: [.isRegularFileKey], options: options) {
+        for case let fileURL as URL in enumerator {
+            do {
+                let fileAttributes = try fileURL.resourceValues(forKeys:[.isRegularFileKey])
+                if fileAttributes.isRegularFile! {
+                    urls.append(fileURL)
+                }
+            } catch { print(error, fileURL) }
+        }
+    }
+
+    let result = urls.map { $0.path }
+    return as_value(env, result)
+}
+
+// MARK: - is_movie
+
+func is_movie(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+    guard let args = get_args(env, info), args.count == 1 else { return nil }
+    guard var arg0 = args[0] as? String else { return nil }
+    let url = URL(fileURLWithPath: arg0)
+    guard let type = UTType(filenameExtension: url.pathExtension) else { return nil }
+    let result = type.conforms(to: .audiovisualContent)
+    return as_value(env, result)
+}
+
+// MARK: - is_image
+
+func is_image(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+    guard let args = get_args(env, info), args.count == 1 else { return nil }
+    guard var arg0 = args[0] as? String else { return nil }
+    let url = URL(fileURLWithPath: arg0)
+    guard let type = UTType(filenameExtension: url.pathExtension) else { return nil }
+    let result = type.conforms(to: .image)
+    return as_value(env, result)
+}
+
+// MARK: - can_read_asset
+
+func can_read_asset(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+    guard let args = get_args(env, info), args.count == 1 else { return nil }
+    guard var arg0 = args[0] as? String else { return nil }
+
+    var result = true
+    let url = URL(fileURLWithPath: arg0)
+    let asset = AVAsset(url: url)
+    do {
+        let reader = try AVAssetReader(asset: asset)
+    }
+    catch {
+        result = false
+    }
+    return as_value(env, result)
+}

@@ -17,7 +17,13 @@ var node_function: napi_threadsafe_function_call_js? = { env, tsfn_cb, context, 
     var script = "t = process._linkedBinding('texel');"
 
     if event.type == .keyDown {
-        script += "t.onKeyDown(\(event.keyCode));"
+        script += """
+        try {
+            t.onKeyDown(\(event.keyCode));
+        } catch (error) {
+            console.error(error);
+        }
+        """
     }
 
     let s = as_value(env, script)

@@ -14,8 +14,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var controllers = [MetalViewController]()
 
     func makeWindow(in rect: NSRect) {
-//        let styleMask: NSWindow.StyleMask = [.closable, .resizable, .titled]
-        let styleMask: NSWindow.StyleMask = [.borderless]
+        let styleMask: NSWindow.StyleMask = [.closable, .resizable, .titled]
+//        let styleMask: NSWindow.StyleMask = [.borderless]
         let window = Window(contentRect: rect, styleMask: styleMask, backing: .buffered, defer: false)
         window.title = "Texel"
         window.level = .statusBar

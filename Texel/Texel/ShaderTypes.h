@@ -26,6 +26,8 @@ typedef NS_ENUM(EnumBackingType, BufferIndex)
     BufferIndexUniforms         = 0,
     BufferIndexVertices         = 1,
     BufferIndexModel            = 2,
+    BufferIndexTime             = 3,
+    BufferIndexPoint            = 4,
 };
 
 typedef NS_ENUM(EnumBackingType, VertexAttribute)

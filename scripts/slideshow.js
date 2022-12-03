@@ -1,8 +1,6 @@
 'use strict';
 
-delete require.cache[require.resolve('./txl.js')];
-const t = process._linkedBinding('texel'); 
-const txl = require('./txl.js');
+const t = process._linkedBinding('texel');
 
 function make() {
     let l = t.Layer();
@@ -12,12 +10,13 @@ function make() {
     l.size = t.size.map(x=>x*3/4);
     l.position = t.size.map(x=>x/2);
     let file = files[index];
-    if (txl.is_movie(file)) {
+    console.log('file', file);
+    if (texel.isMovie(file)) {
         l.content = t.Movie(file, true);
         l.contentVolume = 0;
         l.content.start();
     }
-    if (txl.is_image(file)) {
+    if (texel.isImage(file)) {
         l.content = t.Image(file);
     }
     return l;
@@ -51,25 +50,26 @@ function step() {
     global.gc();
 }
 
-t.onKeyDown = keyCode => { 
-    if (keyCode == 125) { // down
+t.onKeyDown = keyCode => {
+    if (keyCode == 123) { // left
         index += 1;
     }
-    if (keyCode == 126) { // up
+    if (keyCode == 124) { // right
         index -= 1;
     }
     if (index == -1) { index = files.length - 1; }
     if (index == files.length) { index = 0; }
-    step(); 
+    step();
 };
 
 let index = 0;
 let movieDir = path.join(os.homedir(), 'Movies');
 let imageDir = path.join(os.homedir(), 'Pictures');
-let images = txl.get_images(imageDir);
-let movies = txl.get_movies(movieDir);
+let images = texel.contentsOfDirectory(imageDir).filter(v=>texel.isImage(v));
+let movies = texel.contentsOfDirectory(movieDir).filter(v=>texel.isMovie(v));
 let files = images.concat(movies);
-txl.shuffle(files);
+files = files.filter(v=>texel.canReadAsset(v));
+files = texel.shuffle(files);
 index = 0;
 t.layers = [];
 step();

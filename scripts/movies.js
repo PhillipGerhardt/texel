@@ -1,8 +1,6 @@
 'use strict';
 
 const t = process._linkedBinding('texel'); 
-delete require.cache[require.resolve('./txl.js')];
-const txl = require('./txl.js');
 const path = require('path');
 
 function make(files) {
@@ -103,6 +101,7 @@ t.onKeyDown = (keyCode) => {
             l.position = t.size.map(v=>v/2);
             let f = files[idx];
             let c = t.Movie(f, true, false);
+            console.log('file', f);
             c.start();
             l.content = c;
             layers[n*n*2].contentVolume = 0;
@@ -127,7 +126,7 @@ let visible = false;
 let position = 0;
 
 let movieDir = path.join(os.homedir(), 'Movies');
-let files = txl.get_movies(movieDir);
+let files = texel.contentsOfDirectory(movieDir).filter(v=>texel.isMovie(v)).filter(v=>texel.canReadAsset(v));
 for (let i = 0; i < files.length; ++i) {
     t.makeThumbnail(files[i], path.join('/tmp', i + '.png'));
 }

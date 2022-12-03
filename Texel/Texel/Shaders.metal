@@ -68,7 +68,7 @@ typedef struct
 }
 
 [[fragment]] float4 fragmentLayer(FragmentData in [[stage_in]],
-                                  constant Model & model [[ buffer(BufferIndexModel) ]]
+                                  constant Model& model [[ buffer(BufferIndexModel) ]]
                                   )
 {
     return model.color;
@@ -94,3 +94,4 @@ typedef struct
                                   )
 {
 }
+

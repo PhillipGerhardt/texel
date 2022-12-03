@@ -1,7 +1,6 @@
 const t = process._linkedBinding('texel'); 
 const fs = require('fs');
 const path = require('path');
-const txl = require('./txl.js');
 
 function make() {
     let l = t.Layer();
@@ -12,6 +11,7 @@ function make() {
     l.size = t.size.map(x=>x*4/5);
     l.position = t.size.map(x=>x/2);
     let file = files[index];
+    console.log('file', file);
     let content = t.Movie(file, true);
     l.contentVolume = 0;
     content.start();
@@ -111,7 +111,7 @@ t.onKeyDown = keyCode => {
 };
 
 let movieDir = path.join(os.homedir(), 'Movies');
-let files = txl.get_movies(movieDir);
+let files = texel.contentsOfDirectory(movieDir).filter(v=>texel.isMovie(v)).filter(v=>texel.canReadAsset(v));
 let index = 0;
 let position = 0;
 let direction = 1;

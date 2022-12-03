@@ -8,15 +8,17 @@
 import Metal
 import AVFoundation
 import Combine
+import AppKit.NSEvent
 
 /**
  * Play a movie.
  * Can be set to loop and can also be muted.
  */
-class MovieContent: Content {
+class MovieContent: Content, TextureContent {
 
     var size: simd_int2 = .zero
     var textures: [MTLTexture]?
+    var texture: MTLTexture?
 
     var loop = false
     var mute = false
@@ -202,8 +204,10 @@ class MovieContent: Content {
                 }
                 textures.append(texture)
             }
-
             self.textures = textures
+
+            self.texture = self.textures?.first
+
         }
     }
 
@@ -218,6 +222,10 @@ class MovieContent: Content {
             return true
         }
         return false
+    }
+
+    func onEvent(_ event: NSEvent, at point: simd_float2) {
+        seek(to: point.x)
     }
 
 }

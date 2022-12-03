@@ -96,8 +96,11 @@ class Scene {
 
             probe(layers, transform: matrix_identity_float4x4)
 
-            if let hitContent, let hitCoordinates {
-                print("hitContent", hitContent, hitCoordinates)
+            if !evt.event.modifierFlags.contains([.control]) {
+                if let hitContent = hitContent,
+                   let hitCoordinates = hitCoordinates {
+                    hitContent.onEvent(evt.event, at: hitCoordinates)
+                }
             }
 
             if let layer = hitLayer, let layerTransform = hitLayerTransform {
