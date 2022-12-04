@@ -21,6 +21,8 @@
 		687714972938844C008F1CF2 /* Fragment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 687714962938844C008F1CF2 /* Fragment.swift */; };
 		68771499293886BC008F1CF2 /* FragmentNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68771498293886BC008F1CF2 /* FragmentNode.swift */; };
 		6877149B2938F0C2008F1CF2 /* Texture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6877149A2938F0C2008F1CF2 /* Texture.swift */; };
+		689888F1293CADC4000C71D7 /* Ticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689888F0293CADC4000C71D7 /* Ticker.swift */; };
+		689888F3293CAF8C000C71D7 /* NodeTicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689888F2293CAF8C000C71D7 /* NodeTicker.swift */; };
 		68A9BDF529336ACC0036AA5C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A9BDF429336ACC0036AA5C /* AppDelegate.swift */; };
 		68A9BDFB29336ACC0036AA5C /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 68A9BDFA29336ACC0036AA5C /* Shaders.metal */; };
 		68A9BDFE29336ACD0036AA5C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68A9BDFD29336ACD0036AA5C /* Assets.xcassets */; };
@@ -65,6 +67,8 @@
 		687714962938844C008F1CF2 /* Fragment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fragment.swift; sourceTree = "<group>"; };
 		68771498293886BC008F1CF2 /* FragmentNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FragmentNode.swift; sourceTree = "<group>"; };
 		6877149A2938F0C2008F1CF2 /* Texture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Texture.swift; sourceTree = "<group>"; };
+		689888F0293CADC4000C71D7 /* Ticker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticker.swift; sourceTree = "<group>"; };
+		689888F2293CAF8C000C71D7 /* NodeTicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeTicker.swift; sourceTree = "<group>"; };
 		68A9BDF129336ACC0036AA5C /* Texel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Texel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		68A9BDF429336ACC0036AA5C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		68A9BDFA29336ACC0036AA5C /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
@@ -183,12 +187,13 @@
 			isa = PBXGroup;
 			children = (
 				68A9BE23293371EE0036AA5C /* Content.swift */,
+				687714962938844C008F1CF2 /* Fragment.swift */,
 				68A9BE2929338CF40036AA5C /* Image.swift */,
 				68A9BE21293371C90036AA5C /* Layer.swift */,
 				6846600C2933B3A600DC6F7F /* Movie.swift */,
 				684660182934876A00DC6F7F /* Text.swift */,
-				687714962938844C008F1CF2 /* Fragment.swift */,
 				6877149A2938F0C2008F1CF2 /* Texture.swift */,
+				689888F0293CADC4000C71D7 /* Ticker.swift */,
 			);
 			name = content;
 			sourceTree = "<group>";
@@ -198,6 +203,7 @@
 			children = (
 				68A9BE2E293392C60036AA5C /* node_interop.cpp */,
 				68A9BE2F293392C60036AA5C /* node_interop.h */,
+				68771498293886BC008F1CF2 /* FragmentNode.swift */,
 				68A9BE312933932E0036AA5C /* Node.swift */,
 				684660072933956A00DC6F7F /* NodeAnimation.swift */,
 				68A9BE33293393900036AA5C /* NodeCall.swift */,
@@ -207,7 +213,7 @@
 				684660122933B4AF00DC6F7F /* NodeMovie.swift */,
 				684660052933951C00DC6F7F /* NodeTexel.swift */,
 				6846601A293487E300DC6F7F /* NodeText.swift */,
-				68771498293886BC008F1CF2 /* FragmentNode.swift */,
+				689888F2293CAF8C000C71D7 /* NodeTicker.swift */,
 			);
 			name = node;
 			sourceTree = "<group>";
@@ -292,6 +298,8 @@
 				68A9BE26293373BA0036AA5C /* Fitting.swift in Sources */,
 				6877149B2938F0C2008F1CF2 /* Texture.swift in Sources */,
 				68A9BE3A293394520036AA5C /* Animation.swift in Sources */,
+				689888F3293CAF8C000C71D7 /* NodeTicker.swift in Sources */,
+				689888F1293CADC4000C71D7 /* Ticker.swift in Sources */,
 				68A9BE192933705D0036AA5C /* Renderer.swift in Sources */,
 				68771499293886BC008F1CF2 /* FragmentNode.swift in Sources */,
 				68A9BDFB29336ACC0036AA5C /* Shaders.metal in Sources */,

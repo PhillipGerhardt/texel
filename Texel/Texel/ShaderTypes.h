@@ -28,6 +28,7 @@ typedef NS_ENUM(EnumBackingType, BufferIndex)
     BufferIndexModel            = 2,
     BufferIndexTime             = 3,
     BufferIndexPoint            = 4,
+    BufferIndexModelTicker      = 5,
 };
 
 typedef NS_ENUM(EnumBackingType, VertexAttribute)
@@ -61,3 +62,7 @@ typedef struct {
     simd_float4 color;
     simd_float2 size;
 } Model;
+
+typedef struct {
+    float offset;
+} ModelTicker;

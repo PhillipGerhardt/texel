@@ -48,6 +48,7 @@ class Engine {
     let pipelineLayer: MTLRenderPipelineState
     let pipelineContent: MTLRenderPipelineState
     let pipelineStencil: MTLRenderPipelineState
+    let pipelineTicker: MTLRenderPipelineState
 
     let depthStencilIncrementState: MTLDepthStencilState
     let depthStencilDecrementState: MTLDepthStencilState
@@ -128,6 +129,11 @@ class Engine {
             pipelineDescriptor.vertexFunction = library.makeFunction(name: "vertexContent")
             pipelineDescriptor.fragmentFunction = library.makeFunction(name: "fragmentContent")
             pipelineContent = try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
+
+            pipelineDescriptor.label = "Ticker"
+            pipelineDescriptor.vertexFunction = library.makeFunction(name: "vertexTicker")
+            pipelineDescriptor.fragmentFunction = library.makeFunction(name: "fragmentTicker")
+            pipelineTicker = try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
 
             pipelineDescriptor.label = "Stencil"
             pipelineDescriptor.vertexFunction = library.makeFunction(name: "vertexStencil")

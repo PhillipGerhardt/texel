@@ -30,8 +30,8 @@ typedef struct
 // MARK: - content rgba
 
 [[vertex]] FragmentData vertexContent(VertexIn in [[stage_in]],
-                                      constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]],
-                                      constant Model & model [[ buffer(BufferIndexModel) ]]
+                                      constant Uniforms& uniforms [[ buffer(BufferIndexUniforms) ]],
+                                      constant Model& model [[ buffer(BufferIndexModel) ]]
                                       )
 {
     FragmentData out;
@@ -43,7 +43,7 @@ typedef struct
 }
 
 [[fragment]] float4 fragmentContent(FragmentData in [[stage_in]],
-                                    constant Model & model [[ buffer(BufferIndexModel) ]],
+                                    constant Model& model [[ buffer(BufferIndexModel) ]],
                                     texture2d<float> texture [[ texture(TextureIndexOne) ]]
                                     )
 {
@@ -55,8 +55,8 @@ typedef struct
 // MARK: - layer
 
 [[vertex]] FragmentData vertexLayer(VertexIn in [[stage_in]],
-                                    constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]],
-                                    constant Model & model [[ buffer(BufferIndexModel) ]]
+                                    constant Uniforms& uniforms [[ buffer(BufferIndexUniforms) ]],
+                                    constant Model& model [[ buffer(BufferIndexModel) ]]
                                     )
 {
     FragmentData out;
@@ -74,11 +74,49 @@ typedef struct
     return model.color;
 }
 
+// MARK: - ticker
+
+[[vertex]] FragmentData vertexTicker(VertexIn in [[stage_in]],
+                                            constant Uniforms& uniforms [[ buffer(BufferIndexUniforms) ]],
+                                            constant Model& model [[ buffer(BufferIndexModel) ]]
+                                            )
+{
+    FragmentData out;
+    float4 size = float4(model.size, 1, 1);
+    float4 position = float4(in.position, 1.0) * size;
+    out.position = uniforms.projectionMatrix * uniforms.viewMatrix * model.matrix * position;
+    out.texCoord = in.texCoord;
+    return out;
+}
+
+[[fragment]] float4 fragmentTicker(FragmentData in [[stage_in]],
+                                          constant Model& model [[ buffer(BufferIndexModel) ]],
+                                          constant ModelTicker& modelTicker [[ buffer(BufferIndexModelTicker) ]],
+                                          texture2d<float> textureA [[ texture(TextureIndexOne) ]],
+                                          texture2d<float> textureB [[ texture(TextureIndexTwo) ]]
+                                          )
+{
+    constexpr sampler textureSampler(filter::linear, mip_filter::linear);
+    float2 uv = in.texCoord;
+    uv.x += modelTicker.offset;
+
+    float4 rgba;
+
+    if (uv.x < 1) {
+        rgba = textureA.sample(textureSampler, uv);
+    } else {
+        rgba = textureB.sample(textureSampler, uv - float2(1,0));
+    }
+    rgba *= model.color;
+
+    return rgba;
+}
+
 // MARK: - stencil
 
 [[vertex]] FragmentData vertexStencil(VertexIn in [[stage_in]],
-                                      constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]],
-                                      constant Model & model [[ buffer(BufferIndexModel) ]]
+                                      constant Uniforms& uniforms [[ buffer(BufferIndexUniforms) ]],
+                                      constant Model& model [[ buffer(BufferIndexModel) ]]
                                       )
 {
     FragmentData out;
