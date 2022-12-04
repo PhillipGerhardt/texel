@@ -82,6 +82,19 @@ Make text:
     text = texel.Text("Hello World");
     layer.content = text;
 
+Make text ticker:
+
+    layer = texel.Layer();
+    texel.layers = [layer];
+    layer.size = texel.size.map(v=>v/2)
+    layer.position = texel.size.map(v=>v/2);
+    msg = "In computer graphics, a texel, texture element, or texture pixel is the fundamental unit of a texture map. ";
+    speed = 800;
+    fontSize = 128;
+    ticker = texel.Ticker(layer.size, msg, speed, fontSize);
+    layer.content = ticker;
+    ticker.start();
+
 ## Run demos
 
 The demos use asset files from your "Movies" and "Pictures" directories.

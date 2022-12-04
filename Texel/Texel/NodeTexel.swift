@@ -29,6 +29,8 @@ let texel_descriptors: [napi_property_descriptor] = [
     napi_property_descriptor(utf8name: strdup("Movie"), name: nil, method: make_movie, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("Text"), name: nil, method: make_text, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("Fragment"), name: nil, method: make_fragment, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("Ticker"), name: nil, method: make_ticker, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+
 ]
 
 // MARK: - layers
@@ -157,13 +159,13 @@ func is_image(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
 
 func can_read_asset(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     guard let args = get_args(env, info), args.count == 1 else { return nil }
-    guard var arg0 = args[0] as? String else { return nil }
+    guard let arg0 = args[0] as? String else { return nil }
 
     var result = true
     let url = URL(fileURLWithPath: arg0)
     let asset = AVAsset(url: url)
     do {
-        let reader = try AVAssetReader(asset: asset)
+        _ = try AVAssetReader(asset: asset)
     }
     catch {
         result = false

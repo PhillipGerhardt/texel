@@ -147,6 +147,7 @@ func as_any(_ env: napi_env?, _ val: napi_value) -> Any? {
     if let t: MovieContent = cast_to(env!, val) { return t }
     if let t: TextContent = cast_to(env!, val) { return t }
     if let t: FragmentContent = cast_to(env!, val) { return t }
+    if let t: TickerContent = cast_to(env!, val) { return t }
 
     return nil
 }
@@ -176,6 +177,10 @@ func as_value(_ env: napi_env?, _ t: Any) -> napi_value? {
     }
     if let t = t as? FragmentContent,  let val = wrap(env!, t) {
         napi_define_properties(env, val, fragment_descriptors.count, fragment_descriptors)
+        return val
+    }
+    if let t = t as? TickerContent, let val = wrap(env!, t) {
+        napi_define_properties(env, val, ticker_descriptors.count, ticker_descriptors)
         return val
     }
 
