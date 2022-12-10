@@ -12,6 +12,15 @@ class AssetReader {
     var visualOutput: AVAssetReaderTrackOutput?
     var audibleOutput: AVAssetReaderTrackOutput?
 
+    var naturalSize: simd_int2 { get {
+        if let visualOutput {
+            let w = Int32(visualOutput.track.naturalSize.width)
+            let h = Int32(visualOutput.track.naturalSize.height)
+            return simd_int2(w, h)
+        }
+        return .zero
+    } }
+
     var status: AVAssetReader.Status {
         get { reader.status }
     }

@@ -16,4 +16,5 @@ enum Fehler: Error {
     case makeDepthStencilState
     case makeTexture
     case CGContext
+    case makeCommandQueue
 }

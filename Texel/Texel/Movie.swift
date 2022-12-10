@@ -67,6 +67,7 @@ class MovieContent: Content, TextureContent {
             audiblePlayer = AudiblePlayer()
         }
         reader.startReading()
+        size = reader.naturalSize
     }
 
     deinit {
@@ -183,7 +184,7 @@ class MovieContent: Content, TextureContent {
             while self.imageBuffers.count > 2 {
                 self.imageBuffers.removeFirst()
             }
-            size = simd_int2(Int32(CVPixelBufferGetWidth(imageBuffer)), Int32(CVPixelBufferGetHeight(imageBuffer)))
+//            size = simd_int2(Int32(CVPixelBufferGetWidth(imageBuffer)), Int32(CVPixelBufferGetHeight(imageBuffer)))
             var textures = [MTLTexture]()
 
             // rgb has 0 playes

@@ -9,19 +9,19 @@ import AppKit
 
 var node_fun_ref: napi_threadsafe_function?
 var node_function: napi_threadsafe_function_call_js? = { env, tsfn_cb, context, data in
-//    print("calling")
 
     guard let data = data else { return }
     let event = Unmanaged<NSEvent>.fromOpaque(data).takeRetainedValue()
+    guard event.type == .keyDown else { return }
 
-    var script = "t = process._linkedBinding('texel');"
+    var script = ""
 
     if event.type == .keyDown {
-        script += """
+        script = """
         try {
-            t.onKeyDown(\(event.keyCode));
+            texel.onKeyDown(\(event.keyCode));
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
         """
     }
@@ -30,12 +30,13 @@ var node_function: napi_threadsafe_function_call_js? = { env, tsfn_cb, context, 
     var res: napi_value?
     guard napi_run_script(env, s, &res) == napi_ok else {
         print("napi_run_script failed")
-        if let res {
-            let result = as_any(env, res)
-            print("result", result)
-        }
         return
     }
+
+//    if let res {
+//        let result = as_any(env, res)
+//        print("result", String(describing: result))
+//    }
 }
 
 func node_create_calls(_ env: napi_env) {

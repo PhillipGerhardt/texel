@@ -55,7 +55,7 @@ class TickerContent: Content {
         let attributes = [
             NSAttributedString.Key.font: NSFont.systemFont(ofSize: CGFloat(self.fontSize)),
             NSAttributedString.Key.foregroundColor: NSColor(red: CGFloat(self.foregroundColor.x), green: CGFloat(self.foregroundColor.y), blue: CGFloat(self.foregroundColor.z), alpha: CGFloat(self.foregroundColor.w)),
-            NSAttributedString.Key.backgroundColor: NSColor(red: CGFloat(self.backgroundColor.x), green: CGFloat(self.backgroundColor.y), blue: CGFloat(self.backgroundColor.z), alpha: CGFloat(self.backgroundColor.w)),
+//            NSAttributedString.Key.backgroundColor: NSColor(red: CGFloat(self.backgroundColor.x), green: CGFloat(self.backgroundColor.y), blue: CGFloat(self.backgroundColor.z), alpha: CGFloat(self.backgroundColor.w)),
         ]
         let string = NSAttributedString(string: text, attributes: attributes)
         line = CTLineCreateWithAttributedString(string)

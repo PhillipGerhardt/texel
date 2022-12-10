@@ -30,6 +30,7 @@ let texel_descriptors: [napi_property_descriptor] = [
     napi_property_descriptor(utf8name: strdup("Text"), name: nil, method: make_text, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("Fragment"), name: nil, method: make_fragment, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("Ticker"), name: nil, method: make_ticker, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("VisionDetector"), name: nil, method: make_vision_detector, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
 
 ]
 

@@ -105,7 +105,7 @@ func set_layer_content(_ env: napi_env?, _ info: napi_callback_info?) -> napi_va
     guard let args = get_args(env, info), args.count == 1 else { return nil }
     guard let content: Content = args[0] as? Content else { return nil }
     guard let this = unwrap_this(env!, info!) as? Layer else { return nil }
-    print("setting content", content)
+//    print("setting content", content)
     this.content = content
     return nil
 }
