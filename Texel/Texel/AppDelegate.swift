@@ -31,6 +31,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         guard let screen = NSScreen.screens.last else { return }
         makeWindow(in: screen.frame)
+//        guard let screen = NSScreen.screens.first else { return }
+//        let frame = CGRect(x: screen.frame.width/2, y: 0, width: screen.frame.width/2, height: screen.frame.height)
+//        makeWindow(in: frame)
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

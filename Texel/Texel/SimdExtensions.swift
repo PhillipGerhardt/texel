@@ -18,6 +18,10 @@ extension simd_int2 {
         MTLRegion(origin: .init(x: 0, y: 0, z: 0), size: .init(width: Int(self.x), height: Int(self.y), depth: 1))
     }
 
+    var float2: simd_float2 {
+        simd_float2(Float(x), Float(y))
+    }
+
 }
 
 extension simd_float3 {
