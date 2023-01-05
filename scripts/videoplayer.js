@@ -1,18 +1,16 @@
-const t = process._linkedBinding('texel'); 
-const fs = require('fs');
 const path = require('path');
 
 function make() {
-    let l = t.Layer();
+    let l = texel.Layer();
     l.draw = false;
     l.contentColor = 0;
     l.contentScaling = 'fit';
-    l.size = t.size;
-    l.size = t.size.map(x=>x*4/5);
-    l.position = t.size.map(x=>x/2);
+    l.size = texel.size;
+    l.size = texel.size.map(x=>x*4/5);
+    l.position = texel.size.map(x=>x/2);
     let file = files[index];
     console.log('file', file);
-    let content = t.Movie(file, true);
+    let content = texel.Movie(file, true);
     l.contentVolume = 0;
     content.start();
     l.content = content;
@@ -21,14 +19,14 @@ function make() {
 
 function step() {
     l = make();
-    layers = t.layers;
+    layers = texel.layers;
     layers.push(l);
     while (layers.length > 2) { layers.shift(); }
-    t.layers = layers;
+    texel.layers = layers;
     let ad = 2;
     let at = 'outExpo';
-    let ls = t.size.map(x=>x*4/5);
-    let center = t.size.map(x=>x/2);
+    let ls = texel.size.map(x=>x*4/5);
+    let center = texel.size.map(x=>x/2);
     let ty = center[1] - ls[1];
     let sy = center[1] + ls[1];
     if (direction == -1) {
@@ -36,30 +34,31 @@ function step() {
         sy = center[1] - ls[1];
     }
     if (layers.length == 2) {
-        layers[0].position = t.Animation([t.size[0]/2, ty], ad, at);
+        layers[0].position = texel.Animation([texel.size[0]/2, ty], ad, at);
 
-        layers[1].position = [t.size[0]/2, sy];
-        layers[1].position = t.Animation(t.size.map(x=>x/2), ad, at);
+        layers[1].position = [texel.size[0]/2, sy];
+        layers[1].position = texel.Animation(texel.size.map(x=>x/2), ad, at);
 
-        layers[0].contentColor = t.Animation([0,0,0,0], ad);
-        layers[0].contentVolume = t.Animation(0, ad);
-        layers[1].contentColor = t.Animation([1,1,1,1], ad);
-        layers[1].contentVolume = t.Animation(1, ad);
+        layers[0].contentColor = texel.Animation([0,0,0,0], ad);
+        layers[0].contentVolume = texel.Animation(0, ad);
+        layers[1].contentColor = texel.Animation([1,1,1,1], ad);
+        layers[1].contentVolume = texel.Animation(1, ad);
     }
     else {
-        layers[0].position = [t.size[0]/2, sy];
-        layers[0].position = t.Animation(t.size.map(x=>x/2), ad, at);
+        layers[0].position = [texel.size[0]/2, sy];
+        layers[0].position = texel.Animation(texel.size.map(x=>x/2), ad, at);
 
-        layers[0].contentColor = t.Animation([1,1,1,1], ad);
-        layers[0].contentVolume = t.Animation(1, ad);
+        layers[0].contentColor = texel.Animation([1,1,1,1], ad);
+        layers[0].contentVolume = texel.Animation(1, ad);
     }
     global.gc();
 }
 
 function seek() {
-    layers = t.layers;
+    layers = texel.layers;
     layer = layers[layers.length - 1];
     content = layer.content;
+    console.log(position);
     content.seek(position);
 }
 
@@ -75,7 +74,7 @@ function start() {
     layer.content.start();
 }
 
-t.onKeyDown = keyCode => { 
+texel.onKeyDown = keyCode => { 
     console.log(keyCode);
     if (keyCode == 125) { // down
         direction = 1;
@@ -111,12 +110,12 @@ t.onKeyDown = keyCode => {
 };
 
 let movieDir = path.join(os.homedir(), 'Movies');
-let files = texel.contentsOfDirectory(movieDir).filter(v=>texel.isMovie(v)).filter(v=>texel.canReadAsset(v));
+let files = texel.contentsOfDirectory(movieDir, true).filter(v=>texel.isMovie(v)).filter(v=>texel.canReadAsset(v));
 let index = 0;
 let position = 0;
 let direction = 1;
 
-t.layers = [];
+texel.layers = [];
 step();
 
 console.log('use up and down arrow to choose a video');

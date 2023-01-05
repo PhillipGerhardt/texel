@@ -31,6 +31,8 @@ let texel_descriptors: [napi_property_descriptor] = [
     napi_property_descriptor(utf8name: strdup("Fragment"), name: nil, method: make_fragment, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("Ticker"), name: nil, method: make_ticker, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("VisionDetector"), name: nil, method: make_vision_detector, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("Wave"), name: nil, method: make_wave, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("GameOfLife"), name: nil, method: make_game_of_life, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
 
 ]
 
@@ -138,7 +140,7 @@ func contents_of_directory(_ env: napi_env?, _ info: napi_callback_info?) -> nap
 
 func is_movie(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     guard let args = get_args(env, info), args.count == 1 else { return nil }
-    guard var arg0 = args[0] as? String else { return nil }
+    guard let arg0 = args[0] as? String else { return nil }
     let url = URL(fileURLWithPath: arg0)
     guard let type = UTType(filenameExtension: url.pathExtension) else { return nil }
     let result = type.conforms(to: .audiovisualContent)
@@ -149,7 +151,7 @@ func is_movie(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
 
 func is_image(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     guard let args = get_args(env, info), args.count == 1 else { return nil }
-    guard var arg0 = args[0] as? String else { return nil }
+    guard let arg0 = args[0] as? String else { return nil }
     let url = URL(fileURLWithPath: arg0)
     guard let type = UTType(filenameExtension: url.pathExtension) else { return nil }
     let result = type.conforms(to: .image)
