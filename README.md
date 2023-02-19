@@ -4,13 +4,14 @@ Integrate node into a Swift App and use javascript to play videos with Metal.
 
 ## Install dependencies
 
-### nodejs
-
     git submodule update --init --recursive
-    cd node
+
+### Build nodejs
+
+    cd externals
     ./make_node.sh
 
-### net-repl
+### Install net-repl
 
     cd scripts
     npm install
@@ -71,6 +72,17 @@ Show some image:
     layer.size = texel.size.map(v=>v*0.6)
     layer.position = texel.size.map(v=>v/2);
     image = texel.Image('/System/Library/Desktop Pictures/Big Sur Graphic.heic');
+    layer.content = image;
+
+Create and show raw image:
+
+    > ffmpeg -ss 00:00:00 -i myvideo.mov -frames 1 -vf scale=1280:720 -vcodec rawvideo -pix_fmt rgb24 -f image2 /tmp/raw.rgb
+
+    layer = texel.Layer();
+    texel.layers = [layer];
+    layer.size = texel.size.map(v=>v*0.6)
+    layer.position = texel.size.map(v=>v/2);
+    image = texel.Raw('/tmp/raw.rgb', 1280, 720, 3);
     layer.content = image;
 
 Make text:

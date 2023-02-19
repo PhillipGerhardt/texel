@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		681855A629A21B0600CF94FA /* Raw.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681855A529A21B0600CF94FA /* Raw.swift */; };
+		681855A829A21C9A00CF94FA /* NodeRaw.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681855A729A21C9A00CF94FA /* NodeRaw.swift */; };
 		6821E156294F5E38008710FE /* Wave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6821E155294F5E38008710FE /* Wave.swift */; };
 		6821E158294F5EE5008710FE /* NodeWave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6821E157294F5EE5008710FE /* NodeWave.swift */; };
 		6821E15A294F7336008710FE /* GameOfLife.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6821E159294F7336008710FE /* GameOfLife.swift */; };
@@ -59,6 +61,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		681855A529A21B0600CF94FA /* Raw.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Raw.swift; sourceTree = "<group>"; };
+		681855A729A21C9A00CF94FA /* NodeRaw.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeRaw.swift; sourceTree = "<group>"; };
 		6821E155294F5E38008710FE /* Wave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wave.swift; sourceTree = "<group>"; };
 		6821E157294F5EE5008710FE /* NodeWave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeWave.swift; sourceTree = "<group>"; };
 		6821E159294F7336008710FE /* GameOfLife.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOfLife.swift; sourceTree = "<group>"; };
@@ -204,6 +208,7 @@
 				68A9BE2929338CF40036AA5C /* Image.swift */,
 				68A9BE21293371C90036AA5C /* Layer.swift */,
 				6846600C2933B3A600DC6F7F /* Movie.swift */,
+				681855A529A21B0600CF94FA /* Raw.swift */,
 				684660182934876A00DC6F7F /* Text.swift */,
 				6877149A2938F0C2008F1CF2 /* Texture.swift */,
 				689888F0293CADC4000C71D7 /* Ticker.swift */,
@@ -227,6 +232,7 @@
 				68A9BE37293394180036AA5C /* NodeImage.swift */,
 				68A9BE35293393B90036AA5C /* NodeLayer.swift */,
 				684660122933B4AF00DC6F7F /* NodeMovie.swift */,
+				681855A729A21C9A00CF94FA /* NodeRaw.swift */,
 				684660052933951C00DC6F7F /* NodeTexel.swift */,
 				6846601A293487E300DC6F7F /* NodeText.swift */,
 				689888F2293CAF8C000C71D7 /* NodeTicker.swift */,
@@ -309,12 +315,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				681855A829A21C9A00CF94FA /* NodeRaw.swift in Sources */,
 				684660082933956A00DC6F7F /* NodeAnimation.swift in Sources */,
 				68A9BE36293393B90036AA5C /* NodeLayer.swift in Sources */,
 				689888F5293CE3D7000C71D7 /* VisionDetector.swift in Sources */,
 				68A9BE1D293370D40036AA5C /* DisplayLink.swift in Sources */,
 				68A9BE30293392C60036AA5C /* node_interop.cpp in Sources */,
 				68A9BE26293373BA0036AA5C /* Fitting.swift in Sources */,
+				681855A629A21B0600CF94FA /* Raw.swift in Sources */,
 				6877149B2938F0C2008F1CF2 /* Texture.swift in Sources */,
 				68A9BE3A293394520036AA5C /* Animation.swift in Sources */,
 				689888F3293CAF8C000C71D7 /* NodeTicker.swift in Sources */,

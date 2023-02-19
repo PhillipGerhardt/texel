@@ -15,6 +15,7 @@ enum Fehler: Error {
     case makeDefaultLibrary
     case makeDepthStencilState
     case makeTexture
+    case makeBuffer
     case CGContext
     case makeCommandQueue
 }

@@ -151,6 +151,7 @@ func as_any(_ env: napi_env?, _ val: napi_value) -> Any? {
     if let t: VisionDetectorContent = cast_to(env!, val) { return t }
     if let t: WaveContent = cast_to(env!, val) { return t }
     if let t: GameOfLifeContent = cast_to(env!, val) { return t }
+    if let t: RawContent = cast_to(env!, val) { return t }
 
     return nil
 }
@@ -195,6 +196,10 @@ func as_value(_ env: napi_env?, _ t: Any) -> napi_value? {
         return val
     }
     if let t = t as? GameOfLifeContent, let val = wrap(env!, t) {
+        napi_define_properties(env, val, content_descriptors.count, content_descriptors)
+        return val
+    }
+    if let t = t as? RawContent, let val = wrap(env!, t) {
         napi_define_properties(env, val, content_descriptors.count, content_descriptors)
         return val
     }
