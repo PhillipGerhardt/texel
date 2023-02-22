@@ -14,13 +14,18 @@ import MetalKit
 class ImageContent: Content, TextureContent {
     var size: simd_int2 = .zero
     var texture: MTLTexture?
+    var semaphore: DispatchSemaphore?
 
-    convenience init(path: String) {
-        self.init(url: URL(fileURLWithPath: path))
+    convenience init(path: String, loadSync: Bool? = nil) {
+        self.init(url: URL(fileURLWithPath: path), loadSync: loadSync)
     }
 
-    init(url: URL) {
+    init(url: URL, loadSync: Bool? = nil) {
+        if loadSync == true {
+            semaphore = DispatchSemaphore(value: 0)
+        }
         Task {
+            defer { semaphore?.signal() }
             let options: [MTKTextureLoader.Option: Any] = [
                 .allocateMipmaps: true,
                 .generateMipmaps: true,
@@ -37,6 +42,7 @@ class ImageContent: Content, TextureContent {
                 print("error loading \(url):", error)
             }
         }
+        semaphore?.wait()
     }
 
     func configure(_ renderEncoder: MTLRenderCommandEncoder) -> Bool {
