@@ -30,11 +30,11 @@ class RawContent: Content, TextureContent {
                 let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba8Unorm, width: width, height: height, mipmapped: false)
                 textureDescriptor.usage = [.shaderRead]
                 guard let buffer = engine.device.makeBuffer(length: length, options: [.storageModeManaged]) else { throw Fehler.makeBuffer }
-                guard let texture = buffer.makeTexture(descriptor: textureDescriptor, offset: 0, bytesPerRow: bytesPerRow) else { throw Fehler.makeBuffer }
+                guard let texture = buffer.makeTexture(descriptor: textureDescriptor, offset: 0, bytesPerRow: bytesPerRow) else { throw Fehler.makeTexture }
                 memset(buffer.contents(), 0xff, length)
                 let data = try Data(contentsOf: url)
                 data.withUnsafeBytes { (ptr: UnsafeRawBufferPointer) in
-                    (0..<(numPixels)).forEach { index in
+                    (0..<numPixels).forEach { index in
                         memcpy(buffer.contents().advanced(by: index * pixelSize), ptr.baseAddress?.advanced(by: index * bytesPerPixel), bytesPerPixel)
                     }
                 }
