@@ -18,4 +18,5 @@ enum Fehler: Error {
     case makeBuffer
     case CGContext
     case makeCommandQueue
+    case CIFilter
 }

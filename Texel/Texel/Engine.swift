@@ -27,7 +27,10 @@ class Engine {
     var scene = Scene()
 
     let device: MTLDevice
-    /// Used by the ImageContent. No need to create a seperate one for each Image
+
+    /// Used by the Filter content.
+    let coreImageContext: CIContext
+    /// Used by the ImageContent. No need to create a seperate one for each Image.
     let textureLoader: MTKTextureLoader
     /// Used by the MovieContent to convert CVImageBuffer to metal textures.
     var textureCache: CVMetalTextureCache!
@@ -73,6 +76,7 @@ class Engine {
         if CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, device, nil, &textureCache) != kCVReturnSuccess {
             print("error", Fehler.CVMetalTextureCacheCreate)
         }
+        self.coreImageContext = CIContext(mtlDevice: device)
 
         self.uniformsBuffer = device.makeBuffer(length:alignedUniformsSize, options:[MTLResourceOptions.storageModeShared])!
         self.uniformsBuffer.label = "UniformsBuffer"

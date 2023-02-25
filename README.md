@@ -115,22 +115,24 @@ Make text ticker:
 The demos use asset files from your "Movies" and "Pictures" directories.
 Adjust that to your needs.
 
-    eval(fs.readFileSync('animations.js')+'');
-    eval(fs.readFileSync('movies.js')+'');
-    eval(fs.readFileSync('slideshow.js')+'');
-    eval(fs.readFileSync('grid_exchange.js')+'');
-    eval(fs.readFileSync('videoplayer.js')+'');
     eval(fs.readFileSync('alignment_fitting.js')+'');
+    eval(fs.readFileSync('animations.js')+'');
     eval(fs.readFileSync('choose_animation.js')+'');
-    eval(fs.readFileSync('fragment_metaball.js')+'');
-    eval(fs.readFileSync('fragment_hit.js')+'');
-    eval(fs.readFileSync('fragment_sdf.js')+'');
-    eval(fs.readFileSync('fragment_pixelate.js')+'');
-    eval(fs.readFileSync('fragment_combine_textures.js')+'');
-    eval(fs.readFileSync('fragment_wave_combine.js')+'');
+    eval(fs.readFileSync('filter.js')+'');
     eval(fs.readFileSync('fragment_adjust_lod.js')+'');
+    eval(fs.readFileSync('fragment_combine_textures.js')+'');
+    eval(fs.readFileSync('fragment_hit.js')+'');
+    eval(fs.readFileSync('fragment_metaball.js')+'');
+    eval(fs.readFileSync('fragment_pixelate.js')+'');
+    eval(fs.readFileSync('fragment_sdf.js')+'');
+    eval(fs.readFileSync('fragment_wave_combine.js')+'');
+    eval(fs.readFileSync('game_of_life.js')+'');
+    eval(fs.readFileSync('grid_exchange.js')+'');
+    eval(fs.readFileSync('movies.js')+'');
+    eval(fs.readFileSync('rain.js')+'');
+    eval(fs.readFileSync('slideshow.js')+'');
+    eval(fs.readFileSync('ticker.js')+'');
+    eval(fs.readFileSync('videoplayer.js')+'');
     eval(fs.readFileSync('vision_detector.js')+'');
     eval(fs.readFileSync('wave.js')+'');
-    eval(fs.readFileSync('game_of_life.js')+'');
-    eval(fs.readFileSync('rain.js')+'');
 

@@ -152,6 +152,7 @@ func as_any(_ env: napi_env?, _ val: napi_value) -> Any? {
     if let t: WaveContent = cast_to(env!, val) { return t }
     if let t: GameOfLifeContent = cast_to(env!, val) { return t }
     if let t: RawContent = cast_to(env!, val) { return t }
+    if let t: FilterContent = cast_to(env!, val) { return t }
 
     return nil
 }
@@ -201,6 +202,10 @@ func as_value(_ env: napi_env?, _ t: Any) -> napi_value? {
     }
     if let t = t as? RawContent, let val = wrap(env!, t) {
         napi_define_properties(env, val, content_descriptors.count, content_descriptors)
+        return val
+    }
+    if let t = t as? FilterContent, let val = wrap(env!, t) {
+        napi_define_properties(env, val, filter_descriptors.count, filter_descriptors)
         return val
     }
 
@@ -329,20 +334,3 @@ func get_args(_ env: napi_env?, _ info: napi_callback_info?) -> [Any]? {
     return result
 }
 
-func node_create_addon(_ env: napi_env, _ exports: napi_value) -> napi_value {
-    print(#function)
-    node_create_calls(env)
-    napi_define_properties(env, exports, texel_descriptors.count, texel_descriptors)
-    return exports
-}
-
-func NodeStart() {
-    print(#function)
-    mynode_create_addon = node_create_addon
-    guard let scriptsURL = Bundle.main.url(forResource: "scripts", withExtension: nil) else { return }
-    FileManager.default.changeCurrentDirectoryPath(scriptsURL.path)
-    let args = ["node", "--expose-gc", "--trace-deprecation", "index.js"]
-    var argv = args.map{strdup($0)!}
-    let node_modules_path = scriptsURL.path.appending("/node_modules")
-    MyNode_start(node_modules_path, Int32(argv.count), &argv)
-}

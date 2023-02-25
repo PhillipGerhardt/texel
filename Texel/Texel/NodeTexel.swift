@@ -22,6 +22,7 @@ let texel_descriptors: [napi_property_descriptor] = [
     napi_property_descriptor(utf8name: strdup("isMovie"), name: nil, method: is_movie, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("isImage"), name: nil, method: is_image, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("canReadAsset"), name: nil, method: can_read_asset, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("filterNames"), name: nil, method: filterNames, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
 
     napi_property_descriptor(utf8name: strdup("Animation"), name: nil, method: make_animation, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("Layer"), name: nil, method: make_layer, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
@@ -34,6 +35,7 @@ let texel_descriptors: [napi_property_descriptor] = [
     napi_property_descriptor(utf8name: strdup("Wave"), name: nil, method: make_wave, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("GameOfLife"), name: nil, method: make_game_of_life, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("Raw"), name: nil, method: make_raw, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("Filter"), name: nil, method: make_filter, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
 
 ]
 
@@ -85,7 +87,7 @@ func make_thumbnail(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value
     guard let arg1 = args[1] as? String else { return nil }
     var arg2 = simd_float2(640, 480)
     if args.count > 2, let arg = as_simd(args[2]) as? simd_float2 { arg2 = arg}
-    engine.saveThumbnail(of: arg0, to: arg1, size: arg2)
+    Engine.saveThumbnail(of: arg0, to: arg1, size: arg2)
     return nil
 }
 
@@ -155,7 +157,7 @@ func is_image(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     guard let arg0 = args[0] as? String else { return nil }
     let url = URL(fileURLWithPath: arg0)
     guard let type = UTType(filenameExtension: url.pathExtension) else { return nil }
-    let result = type.conforms(to: .image)
+    let result = type.conforms(to: .image) && !type.conforms(to: .pdf)
     return as_value(env, result)
 }
 
@@ -174,5 +176,12 @@ func can_read_asset(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value
     catch {
         result = false
     }
+    return as_value(env, result)
+}
+
+// MARK: - filterNames
+
+func filterNames(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+    let result = CIFilter.filterNames(inCategory: nil)
     return as_value(env, result)
 }
