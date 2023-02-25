@@ -1,19 +1,18 @@
 'use strict';
 
-const t = process._linkedBinding('texel'); 
 const path = require('path');
 
 function make(files) {
-    t.layers = [];
-    let layers = t.layers;
+    texel.layers = [];
+    let layers = texel.layers;
     n = Math.ceil(Math.sqrt(files.length));
-    let size = t.size;
+    let size = texel.size;
     let dx = size[0] / n;
     let dy = size[1] / n;
 
     for (let y = 0; y < n; ++y) {
         for (let x = 0; x < n; ++x) {
-            let l = t.Layer();
+            let l = texel.Layer();
             let s = [dx, dy];
             let p = [dx * x + dx / 2, dy * y + dy / 2];
             l.draw = false;
@@ -24,7 +23,7 @@ function make(files) {
     }
     for (let y = 0; y < n; ++y) {
         for (let x = 0; x < n; ++x) {
-            let l = t.Layer();
+            let l = texel.Layer();
             let s = [dx, dy];
             let p = [dx * x + dx / 2, dy * y + dy / 2];
             l.draw = false;
@@ -35,21 +34,21 @@ function make(files) {
             console.log(index, s, p);
             if (index < files.length) {
                 let f = path.join('/tmp', index + '.png')
-                let c = t.Image(f);
+                let c = texel.Image(f);
                 // let f = files[index];
-                // let c = t.Movie(f, true, true);
+                // let c = texel.Movie(f, true, true);
                 c.start();
                 l.content = c;
             }
         }
     }
     layers[0].draw = true;
-    t.layers = layers;
+    texel.layers = layers;
 }
 
-t.onKeyDown = (keyCode) => {
+texel.onKeyDown = (keyCode) => {
     let idx = n * py + px;
-    let layers = t.layers;
+    let layers = texel.layers;
 
     if (visible && keyCode != 49) {
         if (keyCode == 123) /* left */ { position -= 0.1; }
@@ -57,11 +56,11 @@ t.onKeyDown = (keyCode) => {
         if (position > 1) { position = position - 1; }
         if (position < 0) { position = 1 - position; }
         console.log('position', position);
-        layers[n*n*2].content.seek(position);
+        layers[n*n*2].contentexel.seek(position);
     }
 
     if (!visible) {
-        t.layers[idx].draw = false;
+        texel.layers[idx].draw = false;
         if (keyCode == 125) /* down */ { py -= 1; }
         if (keyCode == 126) /* up */ { py += 1; }
         if (keyCode == 123) /* left */ { px -= 1; }
@@ -71,7 +70,7 @@ t.onKeyDown = (keyCode) => {
         if (px == -1) { px = n - 1; }
         if (px == n) { px = 0; }
         idx = n * py + px;
-        t.layers[idx].draw = true;
+        texel.layers[idx].draw = true;
     }
 
     if (keyCode == 49) /* space */ {
@@ -80,11 +79,11 @@ t.onKeyDown = (keyCode) => {
         if (layers.length > n*n*2) {
             console.log('fadeout');
             inTransition = true;
-            layers[n*n*2].contentVolume = t.Animation(0);
-            layers[n*n*2].contentColor = t.Animation([0,0,0,0]);
+            layers[n*n*2].contentVolume = texel.Animation(0);
+            layers[n*n*2].contentColor = texel.Animation([0,0,0,0]);
             setTimeout(()=>{
                 layers.length = n*n*2;
-                t.layers = layers;
+                texel.layers = layers;
                 global.gc();
                 inTransition = false;
                 visible = false;
@@ -94,21 +93,21 @@ t.onKeyDown = (keyCode) => {
 
         if (idx < files.length) {
             console.log('fadein');
-            let l = t.Layer();
+            let l = texel.Layer();
             layers.push(l);
             l.draw = false;
-            l.size = t.size.map(v=>v*0.8)
-            l.position = t.size.map(v=>v/2);
+            l.size = texel.size.map(v=>v*0.8)
+            l.position = texel.size.map(v=>v/2);
             let f = files[idx];
-            let c = t.Movie(f, true, false);
+            let c = texel.Movie(f, true, false);
             console.log('file', f);
             c.start();
             l.content = c;
             layers[n*n*2].contentVolume = 0;
-            layers[n*n*2].contentVolume = t.Animation(1);
+            layers[n*n*2].contentVolume = texel.Animation(1);
             layers[n*n*2].contentColor = 0;
-            layers[n*n*2].contentColor = t.Animation([1,1,1,1]);
-            t.layers = layers;
+            layers[n*n*2].contentColor = texel.Animation([1,1,1,1]);
+            texel.layers = layers;
             inTransition = true;
             visible = true;
             setTimeout(()=>{
@@ -128,7 +127,7 @@ let position = 0;
 let movieDir = path.join(os.homedir(), 'Movies');
 let files = texel.contentsOfDirectory(movieDir).filter(v=>texel.isMovie(v)).filter(v=>texel.canReadAsset(v));
 for (let i = 0; i < files.length; ++i) {
-    t.makeThumbnail(files[i], path.join('/tmp', i + '.png'));
+    texel.makeThumbnail(files[i], path.join('/tmp', i + '.png'));
 }
 make(files);
 
