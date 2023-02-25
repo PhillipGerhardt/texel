@@ -184,10 +184,9 @@ class MovieContent: Content, TextureContent {
             while self.imageBuffers.count > 2 {
                 self.imageBuffers.removeFirst()
             }
-//            size = simd_int2(Int32(CVPixelBufferGetWidth(imageBuffer)), Int32(CVPixelBufferGetHeight(imageBuffer)))
             var textures = [MTLTexture]()
 
-            // rgb has 0 playes
+            // rgb has 0 planes
             let planes = max(CVPixelBufferGetPlaneCount(imageBuffer), 1)
             let pixelFormats: [MTLPixelFormat] = [.rgba16Float]
             (0...(planes-1)).forEach { i in
@@ -206,9 +205,7 @@ class MovieContent: Content, TextureContent {
                 textures.append(texture)
             }
             self.textures = textures
-
             self.texture = self.textures?.first
-
         }
     }
 
