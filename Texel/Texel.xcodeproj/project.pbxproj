@@ -13,6 +13,8 @@
 		6821E158294F5EE5008710FE /* NodeWave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6821E157294F5EE5008710FE /* NodeWave.swift */; };
 		6821E15A294F7336008710FE /* GameOfLife.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6821E159294F7336008710FE /* GameOfLife.swift */; };
 		6821E15C294F7BDF008710FE /* NodeGameOfLife.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6821E15B294F7BDF008710FE /* NodeGameOfLife.swift */; };
+		6823083629A50E2B00CBF26E /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6823083529A50E2B00CBF26E /* Filter.swift */; };
+		6823083829A50F4900CBF26E /* NodeFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6823083729A50F4900CBF26E /* NodeFilter.swift */; };
 		684660062933951C00DC6F7F /* NodeTexel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684660052933951C00DC6F7F /* NodeTexel.swift */; };
 		684660082933956A00DC6F7F /* NodeAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684660072933956A00DC6F7F /* NodeAnimation.swift */; };
 		6846600A2933ABD800DC6F7F /* scripts in Resources */ = {isa = PBXBuildFile; fileRef = 684660092933ABD800DC6F7F /* scripts */; };
@@ -25,7 +27,7 @@
 		684660192934876A00DC6F7F /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684660182934876A00DC6F7F /* Text.swift */; };
 		6846601B293487E300DC6F7F /* NodeText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6846601A293487E300DC6F7F /* NodeText.swift */; };
 		687714972938844C008F1CF2 /* Fragment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 687714962938844C008F1CF2 /* Fragment.swift */; };
-		68771499293886BC008F1CF2 /* FragmentNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68771498293886BC008F1CF2 /* FragmentNode.swift */; };
+		68771499293886BC008F1CF2 /* NodeFragment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68771498293886BC008F1CF2 /* NodeFragment.swift */; };
 		6877149B2938F0C2008F1CF2 /* Texture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6877149A2938F0C2008F1CF2 /* Texture.swift */; };
 		689888F1293CADC4000C71D7 /* Ticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689888F0293CADC4000C71D7 /* Ticker.swift */; };
 		689888F3293CAF8C000C71D7 /* NodeTicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689888F2293CAF8C000C71D7 /* NodeTicker.swift */; };
@@ -67,6 +69,8 @@
 		6821E157294F5EE5008710FE /* NodeWave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeWave.swift; sourceTree = "<group>"; };
 		6821E159294F7336008710FE /* GameOfLife.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOfLife.swift; sourceTree = "<group>"; };
 		6821E15B294F7BDF008710FE /* NodeGameOfLife.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeGameOfLife.swift; sourceTree = "<group>"; };
+		6823083529A50E2B00CBF26E /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
+		6823083729A50F4900CBF26E /* NodeFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeFilter.swift; sourceTree = "<group>"; };
 		684660052933951C00DC6F7F /* NodeTexel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeTexel.swift; sourceTree = "<group>"; };
 		684660072933956A00DC6F7F /* NodeAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeAnimation.swift; sourceTree = "<group>"; };
 		684660092933ABD800DC6F7F /* scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = scripts; path = ../scripts; sourceTree = "<group>"; };
@@ -79,7 +83,7 @@
 		684660182934876A00DC6F7F /* Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
 		6846601A293487E300DC6F7F /* NodeText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeText.swift; sourceTree = "<group>"; };
 		687714962938844C008F1CF2 /* Fragment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fragment.swift; sourceTree = "<group>"; };
-		68771498293886BC008F1CF2 /* FragmentNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FragmentNode.swift; sourceTree = "<group>"; };
+		68771498293886BC008F1CF2 /* NodeFragment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeFragment.swift; sourceTree = "<group>"; };
 		6877149A2938F0C2008F1CF2 /* Texture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Texture.swift; sourceTree = "<group>"; };
 		689888F0293CADC4000C71D7 /* Ticker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticker.swift; sourceTree = "<group>"; };
 		689888F2293CAF8C000C71D7 /* NodeTicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeTicker.swift; sourceTree = "<group>"; };
@@ -203,6 +207,7 @@
 			isa = PBXGroup;
 			children = (
 				68A9BE23293371EE0036AA5C /* Content.swift */,
+				6823083529A50E2B00CBF26E /* Filter.swift */,
 				687714962938844C008F1CF2 /* Fragment.swift */,
 				6821E159294F7336008710FE /* GameOfLife.swift */,
 				68A9BE2929338CF40036AA5C /* Image.swift */,
@@ -223,11 +228,12 @@
 			children = (
 				68A9BE2E293392C60036AA5C /* node_interop.cpp */,
 				68A9BE2F293392C60036AA5C /* node_interop.h */,
-				68771498293886BC008F1CF2 /* FragmentNode.swift */,
 				68A9BE312933932E0036AA5C /* Node.swift */,
 				684660072933956A00DC6F7F /* NodeAnimation.swift */,
 				68A9BE33293393900036AA5C /* NodeCall.swift */,
 				68A9BE3D2933949F0036AA5C /* NodeContent.swift */,
+				6823083729A50F4900CBF26E /* NodeFilter.swift */,
+				68771498293886BC008F1CF2 /* NodeFragment.swift */,
 				6821E15B294F7BDF008710FE /* NodeGameOfLife.swift */,
 				68A9BE37293394180036AA5C /* NodeImage.swift */,
 				68A9BE35293393B90036AA5C /* NodeLayer.swift */,
@@ -328,7 +334,8 @@
 				689888F3293CAF8C000C71D7 /* NodeTicker.swift in Sources */,
 				689888F1293CADC4000C71D7 /* Ticker.swift in Sources */,
 				68A9BE192933705D0036AA5C /* Renderer.swift in Sources */,
-				68771499293886BC008F1CF2 /* FragmentNode.swift in Sources */,
+				6823083629A50E2B00CBF26E /* Filter.swift in Sources */,
+				68771499293886BC008F1CF2 /* NodeFragment.swift in Sources */,
 				68A9BDFB29336ACC0036AA5C /* Shaders.metal in Sources */,
 				6846600F2933B3EC00DC6F7F /* AssetReader.swift in Sources */,
 				68A9BE3E2933949F0036AA5C /* NodeContent.swift in Sources */,
@@ -347,6 +354,7 @@
 				68A9BE2A29338CF40036AA5C /* Image.swift in Sources */,
 				68A9BE28293373DC0036AA5C /* SimdExtensions.swift in Sources */,
 				68A9BE1129336F6D0036AA5C /* MetalViewController.swift in Sources */,
+				6823083829A50F4900CBF26E /* NodeFilter.swift in Sources */,
 				684660172933DBCD00DC6F7F /* EngineExtensions.swift in Sources */,
 				6821E158294F5EE5008710FE /* NodeWave.swift in Sources */,
 				6821E15C294F7BDF008710FE /* NodeGameOfLife.swift in Sources */,

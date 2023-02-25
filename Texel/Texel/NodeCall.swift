@@ -54,3 +54,20 @@ func NodeInterpretEvent(_ event: NSEvent) {
     }
 }
 
+func node_create_addon(_ env: napi_env, _ exports: napi_value) -> napi_value {
+    print(#function)
+    node_create_calls(env)
+    napi_define_properties(env, exports, texel_descriptors.count, texel_descriptors)
+    return exports
+}
+
+func NodeStart() {
+    print(#function)
+    mynode_create_addon = node_create_addon
+    guard let scriptsURL = Bundle.main.url(forResource: "scripts", withExtension: nil) else { return }
+    FileManager.default.changeCurrentDirectoryPath(scriptsURL.path)
+    let args = ["node", "--expose-gc", "--trace-deprecation", "index.js"]
+    var argv = args.map{strdup($0)!}
+    let node_modules_path = scriptsURL.path.appending("/node_modules")
+    MyNode_start(node_modules_path, Int32(argv.count), &argv)
+}

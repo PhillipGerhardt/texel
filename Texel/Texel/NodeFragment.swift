@@ -1,5 +1,5 @@
 //
-//  FragmentNode.swift
+//  NodeFragment.swift
 //  Texel
 //
 //  Created by Phillip Gerhardt on 03.12.22.
