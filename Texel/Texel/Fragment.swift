@@ -19,6 +19,8 @@ class FragmentContent: Content {
     var textureThree: TextureContent?
     var textureFour: TextureContent?
 
+    let startTime = DispatchTime.now()
+
     init() {
     }
 
@@ -43,8 +45,11 @@ class FragmentContent: Content {
     func configure(_ renderEncoder: MTLRenderCommandEncoder) -> Bool {
         if let pipeline {
             renderEncoder.setRenderPipelineState(pipeline)
-            var time = Float(CACurrentMediaTime())
-            renderEncoder.setFragmentBytes(&time, length: MemoryLayout<Float>.size, index: BufferIndex.time.rawValue)
+
+            let elapsedNanoseconds = DispatchTime.now().uptimeNanoseconds - startTime.uptimeNanoseconds
+            var elapsedSeconds = Float(elapsedNanoseconds) / 1_000_000_000
+
+            renderEncoder.setFragmentBytes(&elapsedSeconds, length: MemoryLayout<Float>.size, index: BufferIndex.time.rawValue)
             renderEncoder.setFragmentBytes(&point, length: MemoryLayout<simd_float2>.size, index: BufferIndex.point.rawValue)
 
             if let texture = textureOne?.texture { renderEncoder.setFragmentTexture(texture, index: TextureIndex.one.rawValue) }
