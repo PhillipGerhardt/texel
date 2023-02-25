@@ -35,8 +35,6 @@ function make(files) {
             if (index < files.length) {
                 let f = path.join('/tmp', index + '.png')
                 let c = texel.Image(f);
-                // let f = files[index];
-                // let c = texel.Movie(f, true, true);
                 c.start();
                 l.content = c;
             }
