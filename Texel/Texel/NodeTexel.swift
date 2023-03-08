@@ -22,7 +22,9 @@ let texel_descriptors: [napi_property_descriptor] = [
     napi_property_descriptor(utf8name: strdup("isMovie"), name: nil, method: is_movie, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("isImage"), name: nil, method: is_image, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("canReadAsset"), name: nil, method: can_read_asset, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
-    napi_property_descriptor(utf8name: strdup("filterNames"), name: nil, method: filterNames, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("filterNames"), name: nil, method: filter_names, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("layerAt"), name: nil, method: layer_at, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("isSame"), name: nil, method: is_same, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
 
     napi_property_descriptor(utf8name: strdup("Animation"), name: nil, method: make_animation, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("Layer"), name: nil, method: make_layer, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
@@ -181,7 +183,28 @@ func can_read_asset(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value
 
 // MARK: - filterNames
 
-func filterNames(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+func filter_names(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     let result = CIFilter.filterNames(inCategory: nil)
     return as_value(env, result)
+}
+
+// MARK: - layerAt
+
+func layer_at(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+    guard let args = get_args(env, info), args.count == 1 else { return nil }
+    guard let arg0 = as_simd(args[0]) as? simd_float2 else { return nil }
+    if let layer = engine.scene.layer(at: arg0) {
+        return as_value(env, layer)
+    }
+    return nil
+}
+
+// MARK: - isSame
+
+func is_same(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+    guard let args = get_args(env, info), args.count == 2 else { return nil }
+    guard let arg0 = args[0] as? AnyObject else { return nil }
+    guard let arg1 = args[1] as? AnyObject else { return nil }
+    let res = arg0 === arg1
+    return as_value(env, res)
 }

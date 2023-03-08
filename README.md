@@ -135,4 +135,6 @@ Adjust that to your needs.
     eval(fs.readFileSync('videoplayer.js')+'');
     eval(fs.readFileSync('vision_detector.js')+'');
     eval(fs.readFileSync('wave.js')+'');
+    eval(fs.readFileSync('hit_test.js')+'');
+    eval(fs.readFileSync('color_some_layers.js')+'');
 
