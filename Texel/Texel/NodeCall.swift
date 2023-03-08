@@ -11,20 +11,18 @@ var node_fun_ref: napi_threadsafe_function?
 var node_function: napi_threadsafe_function_call_js? = { env, tsfn_cb, context, data in
 
     guard let data = data else { return }
-    let event = Unmanaged<NSEvent>.fromOpaque(data).takeRetainedValue()
-    guard event.type == .keyDown else { return }
+    let evt = Unmanaged<Event>.fromOpaque(data).takeRetainedValue()
+    guard evt.event.type == .keyDown else { return }
 
-    var script = ""
-
-    if event.type == .keyDown {
-        script = """
+    let script = """
         try {
-            texel.onKeyDown(\(event.keyCode));
+            if (texel.onKeyDown) {
+                texel.onKeyDown(\(evt.event.keyCode), [\(evt.position.x), \(evt.position.y)]);
+            }
         } catch (error) {
             console.log(error);
         }
-        """
-    }
+    """
 
     let s = as_value(env, script)
     var res: napi_value?
@@ -47,7 +45,7 @@ func node_create_calls(_ env: napi_env) {
     }
 }
 
-func NodeInterpretEvent(_ event: NSEvent) {
+func NodeInterpretEvent(_ event: Event) {
     if let node_fun_ref = node_fun_ref {
         let data = Unmanaged.passRetained(event).toOpaque()
         napi_call_threadsafe_function(node_fun_ref, data, napi_tsfn_nonblocking)

@@ -51,15 +51,46 @@ class Scene {
         return (bary1, bary2)
     }
 
+    func layer(at: simd_float2) -> Layer? {
+        let pos = projection * simd_float4(at.x * size.x, at.y * size.y, 0, 1)
+        var hitLayer: Layer?
+
+        func probe(size: simd_float2, transform: simd_float4x4) -> simd_float2? {
+            let bary = barycentric(size: size, transform: transform)
+            // Weight for the triangles.
+            let w1 = bary.0 * simd_float3(pos.x, pos.y, pos.z)
+            let w2 = bary.1 * simd_float3(pos.x, pos.y, pos.z)
+            // Hit any of the triangles?
+            if w1.min() >= 0 || w2.min() >= 0 {
+                let coordinates = w1.x * simd_float2(0, 1) + w1.y * simd_float2(1, 1) + w1.z * simd_float2(0, 0)
+                return coordinates
+            }
+            return nil
+        }
+
+        func probe(_ layers: [Layer], transform: simd_float4x4) {
+            for layer in layers {
+                if let _ = probe(size: layer.size, transform: transform * layer.transform) {
+                    hitLayer = layer
+                }
+                probe(layer.sublayers, transform: transform * layer.childTransform)
+            }
+        }
+
+        probe(layers, transform: matrix_identity_float4x4)
+        return hitLayer
+    }
+
     func interpretEvents() async {
         let evts = await events.pending()
         for evt in evts {
 
-            NodeInterpretEvent(evt.event)
+            NodeInterpretEvent(evt)
 
-            let src = projection * simd_float4(evt.position.x * size.x, evt.position.y * size.y, 0, 1)
+            let pos = projection * simd_float4(evt.position.x * size.x, evt.position.y * size.y, 0, 1)
 //            print("phase", evt.event.phase)
-//            print("src", src, evt.event)
+//            print("position", evt.position)
+//            print("src", src)
 
             var hitLayer: Layer?
             var hitLayerTransform: simd_float4x4?
@@ -70,8 +101,8 @@ class Scene {
             func probe(size: simd_float2, transform: simd_float4x4) -> simd_float2? {
                 let bary = barycentric(size: size, transform: transform)
                 // Weight for the triangles.
-                let w1 = bary.0 * simd_float3(src.x, src.y, src.z)
-                let w2 = bary.1 * simd_float3(src.x, src.y, src.z)
+                let w1 = bary.0 * simd_float3(pos.x, pos.y, pos.z)
+                let w2 = bary.1 * simd_float3(pos.x, pos.y, pos.z)
                 // Hit any of the triangles?
                 if w1.min() > 0 || w2.min() > 0 {
                     let coordinates = w1.x * simd_float2(0, 1) + w1.y * simd_float2(1, 1) + w1.z * simd_float2(0, 0)
@@ -86,7 +117,7 @@ class Scene {
                         hitLayer = layer
                         hitLayerTransform = transform
                     }
-                    if let coords = probe(size: layer.contentSize, transform: transform * layer.contentTransform) {
+                    if layer.content != nil, let coords = probe(size: layer.contentSize, transform: transform * layer.contentTransform) {
                         hitContent = layer.content
                         hitCoordinates = coords
                     }
