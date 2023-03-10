@@ -223,7 +223,15 @@ class MovieContent: Content, TextureContent {
     }
 
     func onEvent(_ event: NSEvent, at point: simd_float2) {
-        seek(to: point.x)
+        if event.type == .leftMouseDown {
+            seek(to: point.x)
+        }
+        if event.type == .scrollWheel {
+            var volume = self.volume + Float(event.deltaY)
+            volume = max(0, volume)
+            volume = min(1, volume)
+            self.volume = volume
+        }
     }
 
 }
