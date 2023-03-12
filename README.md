@@ -110,6 +110,16 @@ Make text ticker:
     layer.content = ticker;
     ticker.start();
 
+Make map:
+
+    layer = texel.Layer();
+    texel.layers = [layer];
+    layer.size = texel.size;
+    layer.position = texel.size.map(v=>v/2);
+    map = texel.Map([512,512]);
+    map.start()
+    layer.content = map;
+
 ## Run demos
 
 The demos use asset files from your "Movies" and "Pictures" directories.

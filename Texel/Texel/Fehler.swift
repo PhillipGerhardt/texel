@@ -19,4 +19,5 @@ enum Fehler: Error {
     case CGContext
     case makeCommandQueue
     case CIFilter
+    case layer
 }

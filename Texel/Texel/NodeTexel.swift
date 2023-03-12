@@ -38,6 +38,7 @@ let texel_descriptors: [napi_property_descriptor] = [
     napi_property_descriptor(utf8name: strdup("GameOfLife"), name: nil, method: make_game_of_life, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("Raw"), name: nil, method: make_raw, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("Filter"), name: nil, method: make_filter, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("Map"), name: nil, method: make_map, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
 
 ]
 
