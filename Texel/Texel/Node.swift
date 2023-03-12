@@ -153,6 +153,7 @@ func as_any(_ env: napi_env?, _ val: napi_value) -> Any? {
     if let t: GameOfLifeContent = cast_to(env!, val) { return t }
     if let t: RawContent = cast_to(env!, val) { return t }
     if let t: FilterContent = cast_to(env!, val) { return t }
+    if let t: MapContent = cast_to(env!, val) { return t }
 
     return nil
 }
@@ -206,6 +207,10 @@ func as_value(_ env: napi_env?, _ t: Any) -> napi_value? {
     }
     if let t = t as? FilterContent, let val = wrap(env!, t) {
         napi_define_properties(env, val, filter_descriptors.count, filter_descriptors)
+        return val
+    }
+    if let t = t as? MapContent, let val = wrap(env!, t) {
+        napi_define_properties(env, val, content_descriptors.count, content_descriptors)
         return val
     }
 

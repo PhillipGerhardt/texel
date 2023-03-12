@@ -42,6 +42,20 @@ typedef struct
     return out;
 }
 
+[[vertex]] FragmentData vertexContentFlipped(VertexIn in [[stage_in]],
+                                      constant Uniforms& uniforms [[ buffer(BufferIndexUniforms) ]],
+                                      constant Model& model [[ buffer(BufferIndexModel) ]]
+                                      )
+{
+    FragmentData out;
+    float4 size = float4(model.size, 1, 1);
+    float4 position = float4(in.position, 1.0) * size;
+    out.position = uniforms.projectionMatrix * uniforms.viewMatrix * model.matrix * position;
+    out.texCoord = in.texCoord;
+    out.texCoord.y = 1 - out.texCoord.y;
+    return out;
+}
+
 [[fragment]] float4 fragmentContent(FragmentData in [[stage_in]],
                                     constant Model& model [[ buffer(BufferIndexModel) ]],
                                     texture2d<float> texture [[ texture(TextureIndexOne) ]]
