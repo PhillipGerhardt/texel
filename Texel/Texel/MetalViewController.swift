@@ -82,6 +82,10 @@ extension MetalViewController {
         onEvent(event: event)
     }
 
+    override func rightMouseDown(with event: NSEvent) {
+        onEvent(event: event)
+    }
+
     public override func rightMouseDragged(with event: NSEvent) {
         onEvent(event: event)
     }

@@ -127,7 +127,7 @@ class Scene {
 
             probe(layers, transform: matrix_identity_float4x4)
 
-            if !evt.event.modifierFlags.contains([.control]) {
+            if !evt.event.modifierFlags.contains(.control), !evt.event.modifierFlags.contains(.option) {
                 if let hitContent = hitContent,
                    let hitCoordinates = hitCoordinates {
                     hitContent.onEvent(evt.event, at: hitCoordinates)
@@ -135,9 +135,7 @@ class Scene {
             }
 
             if let layer = hitLayer, let layerTransform = hitLayerTransform {
-                
-                // drag layers around
-                if evt.event.modifierFlags.contains([.control]) {
+                if evt.event.modifierFlags.contains([.option]) {
                     // set random color to layer
                     if evt.event.type == .leftMouseDown {
                         let r = Float.random(in: 0...1)
@@ -146,8 +144,15 @@ class Scene {
                         let dst = simd_float4(r, g, b, 1)
                         layer.color = dst
                     }
+                }
+                if evt.event.modifierFlags.contains([.control]) {
+                    // bring to front
+                    if evt.event.type == .rightMouseDown {
+                        layers.removeAll { $0 === layer }
+                        layers.append(layer)
+                    }
                     // drag layer
-                    if evt.event.type == .rightMouseDragged {
+                    if evt.event.type == .leftMouseDragged {
                         var p = layer.position
                         var d = simd_float4(evt.delta, 1)
                         let q = simd_quatf(layerTransform)
