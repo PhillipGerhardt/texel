@@ -34,7 +34,7 @@ extension Engine {
               let props = CGImageSourceCopyPropertiesAtIndex(src, 0, nil) as? [CFString: Any] else { return nil }
         guard let width = props[kCGImagePropertyPixelWidth] as? Int32 ,
               let height = props[kCGImagePropertyPixelHeight]  as? Int32 else { return nil }
-        return simd_int2(Int32(width), Int32(height))
+        return simd_int2(width, height)
     }
 
     class func movieSize(at url: URL) -> simd_int2? {
