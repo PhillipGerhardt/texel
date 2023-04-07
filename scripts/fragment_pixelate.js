@@ -42,7 +42,7 @@ float RoundToNearest(float n, float x) {
 `;
 
 let movieDir = path.join(os.homedir(), 'Movies');
-let files = texel.contentsOfDirectory(movieDir, true).filter(v=>texel.isMovie(v)).filter(v=>texel.canReadAsset(v));
+let files = texel.contentsOfDirectory(movieDir, true).filter(v=>texel.isMovie(v)).filter(v=>texel.isPlayable(v));
 files = texel.shuffle(files);
 let file = files[0];
 console.log('file', file);

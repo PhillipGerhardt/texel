@@ -7,7 +7,6 @@
 
 import AppKit.NSApplication
 import Dispatch
-import UniformTypeIdentifiers
 import AVFoundation
 
 let texel_descriptors: [napi_property_descriptor] = [
@@ -21,10 +20,11 @@ let texel_descriptors: [napi_property_descriptor] = [
     napi_property_descriptor(utf8name: strdup("contentsOfDirectory"), name: nil, method: contents_of_directory, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("isMovie"), name: nil, method: is_movie, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("isImage"), name: nil, method: is_image, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
-    napi_property_descriptor(utf8name: strdup("canReadAsset"), name: nil, method: can_read_asset, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("isPlayable"), name: nil, method: is_playable, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("filterNames"), name: nil, method: filter_names, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("layerAt"), name: nil, method: layer_at, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("isSame"), name: nil, method: is_same, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("assetSize"), name: nil, method: asset_size, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
 
     napi_property_descriptor(utf8name: strdup("Animation"), name: nil, method: make_animation, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("Layer"), name: nil, method: make_layer, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
@@ -148,8 +148,7 @@ func is_movie(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     guard let args = get_args(env, info), args.count == 1 else { return nil }
     guard let arg0 = args[0] as? String else { return nil }
     let url = URL(fileURLWithPath: arg0)
-    guard let type = UTType(filenameExtension: url.pathExtension) else { return nil }
-    let result = type.conforms(to: .audiovisualContent)
+    let result = Engine.isMovie(url: url)
     return as_value(env, result)
 }
 
@@ -159,26 +158,20 @@ func is_image(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     guard let args = get_args(env, info), args.count == 1 else { return nil }
     guard let arg0 = args[0] as? String else { return nil }
     let url = URL(fileURLWithPath: arg0)
-    guard let type = UTType(filenameExtension: url.pathExtension) else { return nil }
-    let result = type.conforms(to: .image) && !type.conforms(to: .pdf)
+    let result = Engine.isImage(url: url)
     return as_value(env, result)
 }
 
-// MARK: - can_read_asset
+// MARK: - is_playable
 
-func can_read_asset(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+func is_playable(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     guard let args = get_args(env, info), args.count == 1 else { return nil }
     guard let arg0 = args[0] as? String else { return nil }
 
-    var result = true
     let url = URL(fileURLWithPath: arg0)
     let asset = AVAsset(url: url)
-    do {
-        _ = try AVAssetReader(asset: asset)
-    }
-    catch {
-        result = false
-    }
+    let result = asset.isPlayable
+
     return as_value(env, result)
 }
 
@@ -208,4 +201,15 @@ func is_same(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     guard let arg1 = args[1] as? AnyObject else { return nil }
     let res = arg0 === arg1
     return as_value(env, res)
+}
+
+// MARK: - asset_size
+
+func asset_size(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+    guard let args = get_args(env, info), args.count == 1 else { return nil }
+    guard let arg0 = args[0] as? String else { return nil }
+
+    let url = URL(fileURLWithPath: arg0)
+    let result = Engine.size(of: url)
+    return as_value(env, result)
 }

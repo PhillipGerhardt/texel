@@ -53,10 +53,12 @@ function step() {
 }
 
 let movieDir = path.join(os.homedir(), 'Movies');
-let movies = texel.contentsOfDirectory(movieDir, true).filter(v=>texel.isMovie(v));
+let movies = texel.contentsOfDirectory(movieDir, true).filter(v=>texel.isMovie(v)).filter(v=>texel.isPlayable(v));
 let imageDir = path.join(os.homedir(), 'Pictures');
 let images = texel.contentsOfDirectory(imageDir, true).filter(v=>texel.isImage(v));
-let files = images.concat(movies);
+let files = images.concat(movies)
+    .filter(v=>{let as = texel.assetSize(v); return as != undefined && as[0] < 8192 && as[1] < 8192;})
+
 files = texel.shuffle(files);
 
 texel.layers = [];

@@ -6,7 +6,7 @@ Integrate node into a Swift App and use javascript to play videos with Metal.
 
     git submodule update --init --recursive
 
-### Build nodejs
+### Build externals
 
     cd externals
     ./make_node.sh
@@ -50,7 +50,7 @@ Seek to a position by clicking on it.
     texel.layers = [layer];
     layer.size = texel.size.map(v=>v*0.9)
     layer.position = texel.size.map(v=>v/2);
-    files = texel.contentsOfDirectory(path.join(os.homedir(), 'Movies')).filter(v=>texel.isMovie(v)).filter(v=>texel.canReadAsset(v))
+    files = texel.contentsOfDirectory(path.join(os.homedir(), 'Movies')).filter(v=>texel.isMovie(v)).filter(v=>texel.isPlayable(v))
     file = texel.shuffle(files)[0];
     console.log(file); // make sure it plays in quicktime
     movie = texel.Movie(file, true, false); // loop = true, muted = false

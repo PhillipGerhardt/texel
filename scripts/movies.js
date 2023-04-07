@@ -123,7 +123,7 @@ let visible = false;
 let position = 0;
 
 let movieDir = path.join(os.homedir(), 'Movies');
-let files = texel.contentsOfDirectory(movieDir).filter(v=>texel.isMovie(v)).filter(v=>texel.canReadAsset(v));
+let files = texel.contentsOfDirectory(movieDir).filter(v=>texel.isMovie(v)).filter(v=>texel.isPlayable(v));
 for (let i = 0; i < files.length; ++i) {
     texel.makeThumbnail(files[i], path.join('/tmp', i + '.png'));
 }
