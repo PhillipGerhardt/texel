@@ -7,6 +7,7 @@
 
 import QuickLookThumbnailing
 import ImageIO
+import AVFoundation
 
 extension Engine {
 
@@ -26,6 +27,44 @@ extension Engine {
             CGImageDestinationFinalize(destination)
         }
         semaphore.wait()
+    }
+
+    class func imageSize(at url: URL) -> simd_int2? {
+        guard let src = CGImageSourceCreateWithURL(url as CFURL, nil),
+              let props = CGImageSourceCopyPropertiesAtIndex(src, 0, nil) as? [CFString: Any] else { return nil }
+        guard let width = props[kCGImagePropertyPixelWidth] as? Int32 ,
+              let height = props[kCGImagePropertyPixelHeight]  as? Int32 else { return nil }
+        return simd_int2(Int32(width), Int32(height))
+    }
+
+    class func movieSize(at url: URL) -> simd_int2? {
+        guard let track = AVAsset(url: url).tracks(withMediaType: AVMediaType.video).first else { return nil }
+        let size = track.naturalSize.applying(track.preferredTransform)
+        return simd_int2(Int32(size.width), Int32(size.height))
+    }
+
+    class func size(of url: URL) -> simd_int2? {
+        if isImage(url: url) {
+            return imageSize(at: url)
+        }
+        if isMovie(url: url) {
+            return movieSize(at: url)
+        }
+        return nil
+    }
+
+    class func isMovie(url: URL) -> Bool {
+        guard let type = UTType(filenameExtension: url.pathExtension) else { return false }
+        let result = type.conforms(to: .audiovisualContent)
+        return result
+    }
+
+    class func isImage(url: URL) -> Bool {
+        guard let type = UTType(filenameExtension: url.pathExtension) else { return false }
+        print("type", type)
+        let result = type.conforms(to: .image) && !type.conforms(to: .pdf)
+        print("result", result)
+        return result
     }
 
 }

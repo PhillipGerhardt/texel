@@ -48,7 +48,7 @@ typedef struct
 `;
 
 let movieDir = path.join(os.homedir(), 'Movies');
-let files = texel.contentsOfDirectory(movieDir).filter(v=>texel.isMovie(v)).filter(v=>texel.canReadAsset(v));
+let files = texel.contentsOfDirectory(movieDir).filter(v=>texel.isMovie(v)).filter(v=>texel.isPlayable(v));
 
 layer = texel.Layer();
 layer.size = texel.size.map(v=>v*0.9)
