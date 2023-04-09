@@ -67,6 +67,44 @@ typedef struct
     return rgba * model.color;
 }
 
+// MARK: - yuv triplanar
+
+[[vertex]] FragmentData vertexContentYUVTriplanar(VertexIn in [[stage_in]],
+                                                  constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]],
+                                                  constant Model & model [[ buffer(BufferIndexModel) ]]
+                                                  )
+{
+    FragmentData out;
+    float4 size = float4(model.size, 1, 1);
+    float4 position = float4(in.position, 1.0) * size;
+    out.position = uniforms.projectionMatrix * uniforms.viewMatrix * model.matrix * position;
+    out.texCoord = in.texCoord;
+    return out;
+}
+
+[[fragment]] float4 fragmentContentYUVTriplanar(FragmentData in [[stage_in]],
+                                                constant Model & model [[ buffer(BufferIndexModel) ]],
+                                                texture2d<float> textureY [[ texture(TextureIndexOne) ]],
+                                                texture2d<float> textureU [[ texture(TextureIndexTwo) ]],
+                                                texture2d<float> textureV [[ texture(TextureIndexThree) ]]
+                                                )
+{
+    constexpr sampler textureSampler (filter::linear, mip_filter::linear);
+    float y = textureY.sample(textureSampler, in.texCoord).r;
+    float u = textureU.sample(textureSampler, in.texCoord).r;
+    float v = textureV.sample(textureSampler, in.texCoord).r;
+
+    const float4x4 ycbcrToRGBTransform = float4x4(float4(+1.0000f, +1.0000f, +1.0000f, +0.0000f),
+                                                  float4(+0.0000f, -0.3441f, +1.7720f, +0.0000f),
+                                                  float4(+1.4020f, -0.7141f, +0.0000f, +0.0000f),
+                                                  float4(-0.7010f, +0.5291f, -0.8860f, +1.0000f));
+
+    float4 ycbcr = float4(y, u, v, 1);
+    float4 rgba = ycbcrToRGBTransform * ycbcr;
+    rgba *= model.color;
+    return rgba;
+}
+
 // MARK: - layer
 
 [[vertex]] FragmentData vertexLayer(VertexIn in [[stage_in]],

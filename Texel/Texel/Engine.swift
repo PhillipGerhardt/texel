@@ -51,6 +51,7 @@ class Engine {
     let pipelineLayer: MTLRenderPipelineState
     let pipelineContent: MTLRenderPipelineState
     let pipelineContentFlipped: MTLRenderPipelineState
+    let pipelineContentYUVTriplanar: MTLRenderPipelineState
     let pipelineStencil: MTLRenderPipelineState
     let pipelineTicker: MTLRenderPipelineState
 
@@ -139,6 +140,11 @@ class Engine {
             pipelineDescriptor.vertexFunction = library.makeFunction(name: "vertexContentFlipped")
             pipelineDescriptor.fragmentFunction = library.makeFunction(name: "fragmentContent")
             pipelineContentFlipped = try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
+
+            pipelineDescriptor.label = "ContentYUVTriplanar"
+            pipelineDescriptor.vertexFunction = library.makeFunction(name: "vertexContentYUVTriplanar")
+            pipelineDescriptor.fragmentFunction = library.makeFunction(name: "fragmentContentYUVTriplanar")
+            pipelineContentYUVTriplanar = try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
 
             pipelineDescriptor.label = "Ticker"
             pipelineDescriptor.vertexFunction = library.makeFunction(name: "vertexTicker")
