@@ -10,6 +10,7 @@ Integrate node into a Swift App and use javascript to play videos with Metal.
 
     cd externals
     ./make_node.sh
+    ./make_ffmpeg.sh
 
 ### Install net-repl
 
@@ -63,6 +64,19 @@ To stop the movie we need to unreference all variables and start the javascript 
     texel.layers = [];
     layer = undefined;
     movie = undefined;
+    gc();
+
+Play a movie with FFmpeg:
+
+    layer = texel.Layer();
+    texel.layers = [layer];
+    layer.size = texel.size.map(v=>v*0.9)
+    layer.position = texel.size.map(v=>v/2);
+    files = texel.contentsOfDirectory(path.join(os.homedir(), 'Movies')).filter(v=>texel.isMovie(v));
+    file = texel.shuffle(files)[0];
+    movie = texel.Movie(file, true, false); // loop = true, muted = false
+    movie.start();
+    layer.content = movie;
     gc();
 
 Show some image:

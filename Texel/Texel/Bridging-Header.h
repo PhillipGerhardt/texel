@@ -9,3 +9,4 @@
 
 #include "ShaderTypes.h"
 #include "node_interop.h"
+#include "ffmpeg_interop.h"

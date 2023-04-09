@@ -14,6 +14,12 @@ NODE_LIBS = -lbase64 -lbase64_neon64 -lbrotli -lcares -lgtest -lgtest_main -lhis
 NODE_HEADER_PATH = ../externals/node/src ../externals/node/deps/v8/include ../externals/node/deps/uv/include
 NODE_LIBRARY_PATH = ../externals/node/out/Release
 
-LIBRARY_SEARCH_PATHS = $(NODE_LIBRARY_PATH)
-HEADER_SEARCH_PATHS = $(NODE_HEADER_PATH)
-OTHER_LDFLAGS = $(NODE_LIBS)
+FFMPEG_HEADER_PATH = ../externals/FFmpeg
+FFMPEG_LIBRARY_PATH = ../externals/FFmpeg/libavformat ../externals/FFmpeg/libavutil ../externals/FFmpeg/libavcodec ../externals/FFmpeg/libswscale ../externals/FFmpeg/libswresample
+FFMPEG_LIBS = -lavformat -lavutil -lavcodec -lswscale -lswresample
+
+OTHER_LIBS = -liconv -lbz2 -framework VideoToolBox
+
+LIBRARY_SEARCH_PATHS = $(NODE_LIBRARY_PATH) $(FFMPEG_LIBRARY_PATH)
+HEADER_SEARCH_PATHS = $(NODE_HEADER_PATH) $(FFMPEG_HEADER_PATH)
+OTHER_LDFLAGS = $(NODE_LIBS) $(FFMPEG_LIBS) $(OTHER_LIBS)

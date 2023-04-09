@@ -20,4 +20,9 @@ enum Fehler: Error {
     case makeCommandQueue
     case CIFilter
     case layer
+    case URLWithString(string: String)
+    case avformat_open_input
+    case avcodec_open2
+    case swr_init
+    case swr_alloc_set_opts
 }
