@@ -52,8 +52,8 @@ class FFContent: Content {
     }
 
     init(url: URL) throws {
-        print("avformat_open_input", url.absoluteString)
-        guard 0 == avformat_open_input(&formatContext, url.absoluteString, nil, nil) else {
+        print("avformat_open_input", url.path(percentEncoded: false))
+        guard 0 == avformat_open_input(&formatContext, url.path(percentEncoded: false), nil, nil) else {
             throw Fehler.avformat_open_input
         }
         avformat_find_stream_info(formatContext, nil)
