@@ -41,8 +41,13 @@ Animate something:
 
     size = layer.size; rotation = layer.rotation;
     layer.size = texel.Animation(size.map(v=>v/2));
-    layer.rotation = texel.Animation(rotation + 3.1415)
+    layer.rotation = texel.Animation(rotation + 3.1415);
     setTimeout(()=>{layer.size = size; layer.rotation = rotation;}, 2000);
+
+Cancel a running animation:
+    anim = texel.Animation(100, 10);
+    layer.rotation = anim;
+    setTimeout(()=>{anim.cancel();}, 2000);
 
 Start a movie:
 Seek to a position by clicking on it.
