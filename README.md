@@ -45,9 +45,15 @@ Animate something:
     setTimeout(()=>{layer.size = size; layer.rotation = rotation;}, 2000);
 
 Cancel a running animation:
+
     anim = texel.Animation(100, 10);
     layer.rotation = anim;
     setTimeout(()=>{anim.cancel();}, 2000);
+
+Stopping a running animation by setting the value:
+
+    layer.rotation = texel.Animation(100, 10);
+    setTimeout(()=>{layer.rotation = layer.rotation;}, 2000);
 
 Start a movie:
 Seek to a position by clicking on it.
@@ -79,7 +85,7 @@ Play a movie with FFmpeg:
     layer.position = texel.size.map(v=>v/2);
     files = texel.contentsOfDirectory(path.join(os.homedir(), 'Movies')).filter(v=>texel.isMovie(v));
     file = texel.shuffle(files)[0];
-    movie = texel.Movie(file, true, false); // loop = true, muted = false
+    movie = texel.FF(file, true, false); // loop = true, muted = false
     movie.start();
     layer.content = movie;
     gc();
