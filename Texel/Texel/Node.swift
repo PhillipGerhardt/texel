@@ -218,8 +218,10 @@ func as_value(_ env: napi_env?, _ t: Any) -> napi_value? {
         napi_define_properties(env, val, content_descriptors.count, content_descriptors)
         return val
     }
-
-    /* TODO: Convert Animation? */
+    if let t = t as? Animation, let val = wrap(env!, t) {
+        napi_define_properties(env, val, animation_descriptors.count, animation_descriptors)
+        return val
+    }
 
     /* Convert basic types */
 

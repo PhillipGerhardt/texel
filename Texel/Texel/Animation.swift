@@ -18,6 +18,8 @@ class Animation {
     var duration: Float = 1
     var easeing: (Float) -> Float = linear(_:)
 
+    var timer: NormalizedTimer?
+
     init() {}
 
     init(_ duration: Float?, _ easeing: String?) {
@@ -61,7 +63,8 @@ class Animation {
 
     func start(src: Float, target: inout Published<Float>.Publisher) {
         guard let dst = dst as? Float else { return }
-        NormalizedTimer(duration: duration)
+        timer = NormalizedTimer(duration: duration)
+        timer?
             .map{ self.easeing($0) }
             .map{ $0 * dst + (1-$0) * src }
             .assign(to: &target)
@@ -69,7 +72,8 @@ class Animation {
 
     func start(src: simd_float2, target: inout Published<simd_float2>.Publisher) {
         guard let dst = dst as? simd_float2 else { return }
-        NormalizedTimer(duration: duration)
+        timer = NormalizedTimer(duration: duration)
+        timer?
             .map{ self.easeing($0) }
             .map{ $0 * dst + (1-$0) * src }
             .assign(to: &target)
@@ -77,7 +81,8 @@ class Animation {
 
     func start(src: simd_float3, target: inout Published<simd_float3>.Publisher) {
         guard let dst = dst as? simd_float3 else { return }
-        NormalizedTimer(duration: duration)
+        timer = NormalizedTimer(duration: duration)
+        timer?
             .map{ self.easeing($0) }
             .map{ $0 * dst + (1-$0) * src }
             .assign(to: &target)
@@ -85,7 +90,8 @@ class Animation {
 
     func start(src: simd_float4, target: inout Published<simd_float4>.Publisher) {
         guard let dst = dst as? simd_float4 else { return }
-        NormalizedTimer(duration: duration)
+        timer = NormalizedTimer(duration: duration)
+        timer?
             .map{ self.easeing($0) }
             .map{ $0 * dst + (1-$0) * src }
             .assign(to: &target)
@@ -93,12 +99,16 @@ class Animation {
 
     func start(src: simd_quatf, target: inout Published<simd_quatf>.Publisher) {
         guard let dst = dst as? simd_quatf else { return }
-        print("src", src, "dst", dst)
-        NormalizedTimer(duration: duration)
+        timer = NormalizedTimer(duration: duration)
+        timer?
             .map{ self.easeing($0) }
             .map{ simd_slerp(src, dst, $0) }
             .map { print($0); return $0; }
             .assign(to: &target)
+    }
+
+    func cancel() {
+        timer?.cancel()
     }
 
 }
@@ -159,10 +169,15 @@ class NormalizedTimer: Publisher {
     }
 
     deinit {
+//        Swift.print("NormalizedTimer.deinit")
     }
 
     func receive<S>(subscriber: S) where S : Subscriber, Failure == S.Failure, Output == S.Input {
         manager.receive(subscriber: subscriber)
+    }
+
+    func cancel() {
+        token?.cancel()
     }
 
 }
