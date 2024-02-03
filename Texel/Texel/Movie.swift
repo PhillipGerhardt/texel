@@ -39,6 +39,7 @@ class MovieContent: Content, TextureContent {
             AVVideoYCbCrMatrixKey: AVVideoYCbCrMatrix_ITU_R_2020
         ],
         kCVPixelBufferPixelFormatTypeKey as String: pixelFormatType,
+        kCVPixelBufferMetalCompatibilityKey as String: true
     ]
     let audibleOutputSettings: [String:Any] = [AVFormatIDKey: kAudioFormatLinearPCM, AVLinearPCMIsNonInterleaved: true, AVLinearPCMIsFloatKey: true, AVLinearPCMBitDepthKey: 32]
     let asset: AVAsset
@@ -50,6 +51,16 @@ class MovieContent: Content, TextureContent {
         }
         set {
             audiblePlayer?.volume = newValue
+        }
+    }
+    var position: Float {
+        get {
+            let elapsed = CACurrentMediaTime() - startTime
+            let duration = asset.duration.seconds
+            return Float(elapsed / duration)
+        }
+        set {
+            seek(to: newValue)
         }
     }
 
@@ -104,7 +115,6 @@ class MovieContent: Content, TextureContent {
         let duration = asset.duration
         let num = CMTimeValue(Float(duration.value) * position)
         let timeRange = CMTimeRange(start: CMTime(value: num, timescale: duration.timescale), duration: .positiveInfinity)
-        print(timeRange)
         do {
             reader = try AssetReader(asset: asset, visualOutputSettings: visualOutputSettings, audibleOutputSettings: audibleOutputSettings, timeRange: timeRange)
             reader.startReading()
@@ -134,7 +144,6 @@ class MovieContent: Content, TextureContent {
             }
             return
         }
-
         let elapsed = CACurrentMediaTime() - startTime
 
         if let audibleOutput = reader.audibleOutput {
@@ -206,6 +215,8 @@ class MovieContent: Content, TextureContent {
             }
             self.textures = textures
             self.texture = self.textures?.first
+        } else {
+            print("could not get imagebuffer", sampleBuffer)
         }
     }
 

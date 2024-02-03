@@ -16,6 +16,7 @@ import Metal
 protocol Content: AnyObject {
     var size: simd_int2 { get set }
     var volume: Float { get set }
+    var position: Float { get set }
     func start() // image is a content. can it be started?
     func stop() // or stopped?
     func seek(to position: Float) -> Void
@@ -26,6 +27,7 @@ protocol Content: AnyObject {
 extension Content {
     var size: simd_int2 { get {.zero} set{} }
     var volume: Float { get{0} set{} }
+    var position: Float { get{0} set{} }
     func start() {}
     func stop() {}
     func seek(to position: Float) {}

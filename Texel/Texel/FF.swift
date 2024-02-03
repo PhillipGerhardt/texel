@@ -18,13 +18,23 @@ class FFContent: Content {
     var queuesMap = [Int:[FFFrame]]() // Stream Index -> Decoded frames
     var loop = false
     var mute = false
-
     var volume: Float {
         get {
             audiblePlayer?.mixerNode?.volume ?? 0
         }
         set {
             audiblePlayer?.mixerNode?.volume = newValue
+        }
+    }
+    var position: Float {
+        get {
+            let elapsed = CACurrentMediaTime() - startTime
+            let q = av_make_q(Int32(formatContext.pointee.duration), AV_TIME_BASE)
+            let dur = av_q2d(q)
+            return Float(elapsed / dur)
+        }
+        set {
+            seek(to: newValue)
         }
     }
 
