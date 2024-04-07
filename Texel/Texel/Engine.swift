@@ -10,6 +10,7 @@ import Combine
 import MetalKit
 import Dispatch
 
+
 // The 256 byte aligned size of our uniform structure
 let alignedUniformsSize = (MemoryLayout<Uniforms>.size      + 0xFF) & -0x100
 let alignedVerticesSize = (MemoryLayout<Vertex>.size * 4    + 0xFF) & -0x100
@@ -114,7 +115,7 @@ class Engine {
             pipelineDescriptor.vertexDescriptor = vertexDescriptor
             pipelineDescriptor.stencilAttachmentPixelFormat = depthStencilPixelFormat
             pipelineDescriptor.depthAttachmentPixelFormat = depthStencilPixelFormat
-            pipelineDescriptor.sampleCount = sampleCount
+            pipelineDescriptor.rasterSampleCount = sampleCount
 
             /// Blending should be pre-multiplied
             pipelineDescriptor.colorAttachments[0].pixelFormat                  = colorPixelFormat
