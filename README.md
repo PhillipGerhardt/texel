@@ -150,26 +150,27 @@ Make map:
 The demos use asset files from your "Movies" and "Pictures" directories.
 Adjust that to your needs.
 
-    eval(fs.readFileSync('alignment_fitting.js')+'');
-    eval(fs.readFileSync('animations.js')+'');
-    eval(fs.readFileSync('choose_animation.js')+'');
-    eval(fs.readFileSync('filter.js')+'');
-    eval(fs.readFileSync('fragment_adjust_lod.js')+'');
-    eval(fs.readFileSync('fragment_combine_textures.js')+'');
-    eval(fs.readFileSync('fragment_hit.js')+'');
-    eval(fs.readFileSync('fragment_metaball.js')+'');
-    eval(fs.readFileSync('fragment_pixelate.js')+'');
-    eval(fs.readFileSync('fragment_sdf.js')+'');
-    eval(fs.readFileSync('fragment_wave_combine.js')+'');
-    eval(fs.readFileSync('game_of_life.js')+'');
-    eval(fs.readFileSync('grid_exchange.js')+'');
-    eval(fs.readFileSync('movies.js')+'');
-    eval(fs.readFileSync('rain.js')+'');
-    eval(fs.readFileSync('slideshow.js')+'');
-    eval(fs.readFileSync('ticker.js')+'');
-    eval(fs.readFileSync('videoplayer.js')+'');
-    eval(fs.readFileSync('vision_detector.js')+'');
-    eval(fs.readFileSync('wave.js')+'');
-    eval(fs.readFileSync('hit_test.js')+'');
-    eval(fs.readFileSync('color_some_layers.js')+'');
-
+    eval(fs.readFileSync('alignment_fitting.js', 'utf8'));
+    eval(fs.readFileSync('animations.js', 'utf8'));
+    eval(fs.readFileSync('choose_animation.js', 'utf8'));
+    eval(fs.readFileSync('filter.js', 'utf8'));
+    eval(fs.readFileSync('fragment_adjust_lod.js', 'utf8'));
+    eval(fs.readFileSync('fragment_combine_textures.js', 'utf8'));
+    eval(fs.readFileSync('fragment_hit.js', 'utf8'));
+    eval(fs.readFileSync('fragment_metaball.js', 'utf8'));
+    eval(fs.readFileSync('fragment_pixelate.js', 'utf8'));
+    eval(fs.readFileSync('fragment_sdf.js', 'utf8'));
+    eval(fs.readFileSync('fragment_wave_combine.js', 'utf8'));
+    eval(fs.readFileSync('game_of_life.js', 'utf8'));
+    eval(fs.readFileSync('grid_exchange.js', 'utf8'));
+    eval(fs.readFileSync('movies.js', 'utf8'));
+    eval(fs.readFileSync('rain.js', 'utf8'));
+    eval(fs.readFileSync('slideshow.js', 'utf8'));
+    eval(fs.readFileSync('ticker.js', 'utf8'));
+    eval(fs.readFileSync('videoplayer.js', 'utf8'));
+    eval(fs.readFileSync('vision_detector.js', 'utf8'));
+    eval(fs.readFileSync('wave.js', 'utf8'));
+    eval(fs.readFileSync('hit_test.js', 'utf8'));
+    eval(fs.readFileSync('color_some_layers.js', 'utf8'));
+    eval(fs.readFileSync('movies_special.js', 'utf8'));
+)
