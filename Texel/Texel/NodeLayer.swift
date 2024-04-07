@@ -12,6 +12,7 @@ let layer_descriptors: [napi_property_descriptor] = [
     napi_property_descriptor(utf8name: strdup("position"), name: nil, method: nil, getter: get_layer_position, setter: set_layer_position, value: nil, attributes: napi_default_jsproperty, data: nil),
     napi_property_descriptor(utf8name: strdup("clip"), name: nil, method: nil, getter: get_layer_clip, setter: set_layer_clip, value: nil, attributes: napi_default_jsproperty, data: nil),
     napi_property_descriptor(utf8name: strdup("draw"), name: nil, method: nil, getter: get_layer_draw, setter: set_layer_draw, value: nil, attributes: napi_default_jsproperty, data: nil),
+    napi_property_descriptor(utf8name: strdup("interactive"), name: nil, method: nil, getter: get_layer_interactive, setter: set_layer_interactive, value: nil, attributes: napi_default_jsproperty, data: nil),
     napi_property_descriptor(utf8name: strdup("content"), name: nil, method: nil, getter: get_layer_content, setter: set_layer_content, value: nil, attributes: napi_default_jsproperty, data: nil),
     napi_property_descriptor(utf8name: strdup("contentScaling"), name: nil, method: nil, getter: get_layer_contentScaling, setter: set_layer_contentScaling, value: nil, attributes: napi_default_jsproperty, data: nil),
     napi_property_descriptor(utf8name: strdup("contentHorizontalAlignment"), name: nil, method: nil, getter: get_layer_contentHorizontalAlignment, setter: set_layer_contentHorizontalAlignment, value: nil, attributes: napi_default_jsproperty, data: nil),
@@ -20,7 +21,7 @@ let layer_descriptors: [napi_property_descriptor] = [
     napi_property_descriptor(utf8name: strdup("rotation"), name: nil, method: nil, getter: get_layer_rotation, setter: set_layer_rotation, value: nil, attributes: napi_default_jsproperty, data: nil),
     napi_property_descriptor(utf8name: strdup("color"), name: nil, method: nil, getter: get_layer_color, setter: set_layer_color, value: nil, attributes: napi_default_jsproperty, data: nil),
     napi_property_descriptor(utf8name: strdup("contentColor"), name: nil, method: nil, getter: get_layer_contentColor, setter: set_layer_contentColor, value: nil, attributes: napi_default_jsproperty, data: nil),
-    napi_property_descriptor(utf8name: strdup("sublayers"), name: nil, method: nil, getter: get_layer_sublayers, setter: set_layer_sublayers, value: nil, attributes: napi_default_jsproperty, data: nil),
+    napi_property_descriptor(utf8name: strdup("children"), name: nil, method: nil, getter: get_layer_children, setter: set_layer_children, value: nil, attributes: napi_default_jsproperty, data: nil),
     napi_property_descriptor(utf8name: strdup("pivot"), name: nil, method: nil, getter: get_layer_pivot, setter: set_layer_pivot, value: nil, attributes: napi_default_jsproperty, data: nil),
     napi_property_descriptor(utf8name: strdup("contentVolume"), name: nil, method: nil, getter: get_layer_contentVolume, setter: set_layer_contentVolume, value: nil, attributes: napi_default_jsproperty, data: nil),
     napi_property_descriptor(utf8name: strdup("contentSize"), name: nil, method: nil, getter: get_layer_contentSize, setter: nil, value: nil, attributes: napi_default_jsproperty, data: nil),
@@ -77,6 +78,20 @@ func set_layer_clip(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value
     guard let this = unwrap_this(env!, info!) as? Layer else { return nil }
     guard let args = get_args(env, info), args.count == 1 else { return nil }
     if let arg0 = args[0] as? Bool { this.clip = arg0 }
+    return nil
+}
+
+// MARK: - interactive
+
+func get_layer_interactive(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+    guard let this = unwrap_this(env, info) as? Layer else { return nil }
+    return as_value(env!, this.interactive)
+}
+
+func set_layer_interactive(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+    guard let this = unwrap_this(env!, info!) as? Layer else { return nil }
+    guard let args = get_args(env, info), args.count == 1 else { return nil }
+    if let arg0 = args[0] as? Bool { this.interactive = arg0 }
     return nil
 }
 
@@ -220,19 +235,19 @@ func set_layer_contentColor(_ env: napi_env?, _ info: napi_callback_info?) -> na
     return nil
 }
 
-// MARK: - sublayers
+// MARK: - children
 
-func get_layer_sublayers(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+func get_layer_children(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     guard let this = unwrap_this(env!, info!) as? Layer else { return nil }
-    let layers = this.sublayers
+    let layers = this.children
     return as_value(env, layers)
 }
 
-func set_layer_sublayers(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+func set_layer_children(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     guard let args = get_args(env, info), args.count == 1 else { return nil }
     guard let this = unwrap_this(env!, info!) as? Layer else { return nil }
     guard let arg0 = args[0] as? [Layer] else { return nil }
-    this.sublayers = arg0
+    this.children = arg0
     return nil
 }
 

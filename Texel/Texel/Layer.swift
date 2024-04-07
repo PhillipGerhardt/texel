@@ -12,8 +12,10 @@ import Combine
  * @Published properties can be animated.
  */
 class Layer {
+    var children = [Layer]()
 
-    var sublayers = [Layer]()
+    /// Allows interaction with events
+    var interactive = true
 
     /// Clip content and childlayers to this layer size
     var clip: Bool = false

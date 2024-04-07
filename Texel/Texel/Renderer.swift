@@ -127,7 +127,7 @@ class Renderer: NSObject, MTKViewDelegate {
                 renderEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
             }
 
-            let sublayers = layer.sublayers // copy on write
+            let sublayers = layer.children // copy on write
             render(sublayers, transform: transform * layer.childTransform, renderEncoder: renderEncoder)
 
             if clip {
