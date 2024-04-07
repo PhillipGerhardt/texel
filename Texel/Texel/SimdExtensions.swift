@@ -32,6 +32,14 @@ extension simd_float3 {
 
 }
 
+extension simd_float4 {
+
+    var xy: simd_float2 {
+        simd_float2(self.x, self.y)
+    }
+
+}
+
 extension simd_float4x4 {
 
     func translated(_ translation: simd_float3) -> simd_float4x4 {
@@ -48,6 +56,5 @@ extension simd_float4x4 {
         m.columns.3.y += translation.y
         return m
     }
-
 
 }
