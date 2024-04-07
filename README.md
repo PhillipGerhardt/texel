@@ -172,5 +172,5 @@ Adjust that to your needs.
     eval(fs.readFileSync('wave.js', 'utf8'));
     eval(fs.readFileSync('hit_test.js', 'utf8'));
     eval(fs.readFileSync('color_some_layers.js', 'utf8'));
-    eval(fs.readFileSync('movies_special.js', 'utf8'));
+    eval(fs.readFileSync('moving_bars.js', 'utf8'));
 )

@@ -20,11 +20,11 @@ function make(file) {
 
 function exchange(idx, file) {
     let l = make(file);
-    let layers = texel.layers[idx].sublayers;
+    let layers = texel.layers[idx].children;
     let layer = texel.layers[idx];
     layers.push(l);
     while (layers.length > 2) { layers.shift(); }
-    texel.layers[idx].sublayers = layers;
+    texel.layers[idx].children = layers;
     let ad = 2;
     // let af = 'outCubic';
     let af = 'outBounce';
@@ -32,9 +32,9 @@ function exchange(idx, file) {
         layers[0].position = texel.Animation([0, -dy], ad, af);
         layers[1].position = texel.Animation([0, 0], ad, af);
         setTimeout(()=>{
-            let layers = texel.layers[idx].sublayers;
+            let layers = texel.layers[idx].children;
             while (layers.length > 1) { layers.shift(); }
-            texel.layers[idx].sublayers = layers;
+            texel.layers[idx].children = layers;
             global.gc();
         }, ad*1000); 
     }
