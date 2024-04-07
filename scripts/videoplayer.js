@@ -43,6 +43,9 @@ function step() {
         layers[0].contentVolume = texel.Animation(0, ad);
         layers[1].contentColor = texel.Animation([1,1,1,1], ad);
         layers[1].contentVolume = texel.Animation(1, ad);
+
+        let oldContent = layers[0].content;
+        setTimeout(()=>{oldContent.stop();}, 1000 * ad);
     }
     else {
         layers[0].position = [texel.size[0]/2, sy];
@@ -54,43 +57,51 @@ function step() {
     global.gc();
 }
 
-function seek() {
+function forward() {
+    console.log('forward');
     layers = texel.layers;
     layer = layers[layers.length - 1];
     content = layer.content;
-    console.log(position);
-    content.seek(position);
+    let pos = content.position;
+    console.log('pos', pos);
+    pos = Math.min(pos + 0.05, 1);
+    console.log('pos', pos);
+    content.position = pos;
+}
+
+function backward() {
+    console.log('backward');
+    layers = texel.layers;
+    layer = layers[layers.length - 1];
+    content = layer.content;
+    let pos = content.position;
+    console.log('pos', pos);
+    pos = Math.max(pos - 0.05, 0);
+    console.log('pos', pos);
+    content.position = pos;
 }
 
 function stop() {
-    layers = t.layers;
+    layers = texel.layers;
     layer = layers[layers.length - 1];
     layer.content.stop();
 }
 
 function start() {
-    layers = t.layers;
+    layers = texel.layers;
     layer = layers[layers.length - 1];
     layer.content.start();
 }
 
-texel.onKeyDown = keyCode => { 
+texel.onKeyDown = keyCode => {
     console.log(keyCode);
     if (keyCode == 125) { // down
         direction = 1;
         index += 1;
-        position = 0;
     }
     if (keyCode == 126) { // up
         direction = -1;
         index -= 1;
-        position = 0;
-    }
-    if (keyCode == 123) { // left
-        position -= 0.05;
-    }
-    if (keyCode == 124) { // right
-        position += 0.05;
     }
     if (keyCode == 35) { // p
         stop();
@@ -98,15 +109,13 @@ texel.onKeyDown = keyCode => {
     if (keyCode == 8) { // c
         start();
     }
-    
+
     if (index == -1) { index = files.length - 1; }
     if (index == files.length) { index = 0; }
-    if (position < 0) { position = 0.9; }
-    if (position > 0.95) { position = 0; }
-    
-    if (keyCode == 125 || keyCode == 126) { step(); }
-    if (keyCode == 123 || keyCode == 124) { seek(); }
 
+    if (keyCode == 125 || keyCode == 126) { step(); }
+    if (keyCode == 123) { backward(); }
+    if (keyCode == 124) { forward(); }
 };
 
 let movieDir = path.join(os.homedir(), 'Movies');
@@ -115,7 +124,6 @@ let files = texel.contentsOfDirectory(movieDir, true)
     .filter(v=>texel.isPlayable(v))
     .filter(v=>texel.assetSize(v)[0] <= 1920);
 let index = 0;
-let position = 0;
 let direction = 1;
 
 texel.layers = [];
