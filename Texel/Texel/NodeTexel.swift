@@ -25,6 +25,7 @@ let texel_descriptors: [napi_property_descriptor] = [
     napi_property_descriptor(utf8name: strdup("layerAt"), name: nil, method: layer_at, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("isSame"), name: nil, method: is_same, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("assetSize"), name: nil, method: asset_size, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("isVisible"), name: nil, method: is_visible, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
 
     napi_property_descriptor(utf8name: strdup("Animation"), name: nil, method: make_animation, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("Layer"), name: nil, method: make_layer, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
@@ -212,5 +213,15 @@ func asset_size(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
 
     let url = URL(fileURLWithPath: arg0)
     let result = Engine.size(of: url)
+    return as_value(env, result)
+}
+
+// MARK: - is_visible
+
+func is_visible(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+    guard let args = get_args(env, info), args.count == 1 else { return nil }
+    guard let arg0 = args[0] as? Layer else { return nil }
+
+    let result = engine.scene.isVisible(layer: arg0)
     return as_value(env, result)
 }
