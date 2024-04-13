@@ -19,6 +19,9 @@ let alignedVerticesSize = (MemoryLayout<Vertex>.size * 4    + 0xFF) & -0x100
  * Holds all metal ressources needed.
  */
 class Engine {
+
+    let serialQueue = DispatchQueue(label: "de.texel.serialQueue")
+
 //    let colorPixelFormat: MTLPixelFormat = .bgra8Unorm
     let colorPixelFormat: MTLPixelFormat = .bgra10_xr
     let depthStencilPixelFormat: MTLPixelFormat = .depth32Float_stencil8

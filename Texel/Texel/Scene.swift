@@ -12,16 +12,15 @@ import Combine
  */
 class EventsQueue {
     private var events = [Event]()
-    private let queue = DispatchQueue.main
 
     func append(_ event: Event) {
-        queue.async {
+        engine.serialQueue.async {
             self.events.append(event)
         }
     }
 
     func pending() -> [Event] {
-        return  queue.sync {
+        return engine.serialQueue.sync {
             let pendingEvents = self.events
             self.events.removeAll()
             return pendingEvents
@@ -73,7 +72,7 @@ class Scene {
     }
 
     func isVisible(layer: Layer, with transform: simd_float4x4? = nil) -> Bool {
-        var layerTransform = transform ?? self.transform(ofLayer: layer)
+        let layerTransform = transform ?? self.transform(ofLayer: layer)
         guard let layerTransform else { return false }
 
         let layerSize = simd_float4(layer.size.x, layer.size.y, 0, 1)
