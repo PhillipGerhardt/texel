@@ -61,9 +61,7 @@ extension Engine {
 
     class func isImage(url: URL) -> Bool {
         guard let type = UTType(filenameExtension: url.pathExtension) else { return false }
-        print("type", type)
         let result = type.conforms(to: .image) && !type.conforms(to: .pdf)
-        print("result", result)
         return result
     }
 
