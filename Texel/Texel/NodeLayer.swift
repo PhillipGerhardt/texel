@@ -45,7 +45,8 @@ func get_layer_size(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value
 func set_layer_size(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     guard let this = unwrap_this(env!, info!) as? Layer else { return nil }
     guard let args = get_args(env, info), args.count == 1 else { return nil }
-    if let arg0 = args[0] as? Animation { arg0.start(src: this.size, target: &this.$size) }
+    Animations.shared.stop(this, keyPath: \Layer.$size)
+    if let arg0 = args[0] as? Animation { arg0.start(src: this.size, target: this, keyPath: \Layer.$size) }
     if let arg0 = as_simd(args[0]) as? simd_float2 { this.size = arg0 }
     return nil
 }
@@ -60,9 +61,8 @@ func get_layer_position(_ env: napi_env?, _ info: napi_callback_info?) -> napi_v
 func set_layer_position(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     guard let this = unwrap_this(env!, info!) as? Layer else { return nil }
     guard let args = get_args(env, info), args.count == 1 else { return nil }
-    if let arg0 = args[0] as? Animation { arg0.start(src: this.position, target: &this.$position) }
-//    if let arg0 = as_simd(args[0]) as? simd_float2 { this.position = simd_float3(arg0.x, arg0.y, 0) }
-//    if let arg0 = as_simd(args[0]) as? simd_float3 { this.position = arg0 }
+    Animations.shared.stop(this, keyPath: \Layer.$position)
+    if let arg0 = args[0] as? Animation { arg0.start(src: this.position, target: this, keyPath: \Layer.$position) }
     if let arg0 = as_simd(args[0]) as? simd_float2 { this.position = arg0 }
     return nil
 }
@@ -183,8 +183,9 @@ func get_layer_orientation(_ env: napi_env?, _ info: napi_callback_info?) -> nap
 func set_layer_orientation(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     guard let args = get_args(env, info), args.count == 1 else { return nil }
     guard let this = unwrap_this(env!, info!) as? Layer else { return nil }
+    Animations.shared.stop(this, keyPath: \Layer.$orientation)
     if let arg0 = as_simd(args[0]) as? simd_quatf { this.orientation = arg0 }
-    if let arg0 = args[0] as? Animation { arg0.start(src: this.orientation, target: &this.$orientation) }
+    if let arg0 = args[0] as? Animation { arg0.start(src: this.orientation, target: this, keyPath: \Layer.$orientation) }
     return nil
 }
 
@@ -198,7 +199,8 @@ func get_layer_rotation(_ env: napi_env?, _ info: napi_callback_info?) -> napi_v
 func set_layer_rotation(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     guard let args = get_args(env, info), args.count == 1 else { return nil }
     guard let this = unwrap_this(env!, info!) as? Layer else { return nil }
-    if let arg0 = args[0] as? Animation { arg0.start(src: this.rotation, target: &this.$rotation) }
+    Animations.shared.stop(this, keyPath: \Layer.$rotation)
+    if let arg0 = args[0] as? Animation { arg0.start(src: this.rotation, target: this, keyPath: \Layer.$rotation) }
     if let arg0 = args[0] as? Float { this.rotation = arg0 }
     return nil
 }
@@ -213,7 +215,8 @@ func get_layer_color(_ env: napi_env?, _ info: napi_callback_info?) -> napi_valu
 func set_layer_color(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     guard let args = get_args(env, info), args.count == 1 else { return nil }
     guard let this = unwrap_this(env!, info!) as? Layer else { return nil }
-    if let arg0 = args[0] as? Animation { arg0.start(src: this.color, target: &this.$color) }
+    Animations.shared.stop(this, keyPath: \Layer.$color)
+    if let arg0 = args[0] as? Animation { arg0.start(src: this.color, target: this, keyPath: \Layer.$color) }
     if let arg0 = as_simd(args[0]) as? simd_float4 { this.color = arg0 }
     if let arg0 = as_simd(args[0]) as? Float { this.color = simd_float4(repeating: arg0) }
     return nil
@@ -229,7 +232,8 @@ func get_layer_contentColor(_ env: napi_env?, _ info: napi_callback_info?) -> na
 func set_layer_contentColor(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     guard let args = get_args(env, info), args.count == 1 else { return nil }
     guard let this = unwrap_this(env!, info!) as? Layer else { return nil }
-    if let arg0 = args[0] as? Animation { arg0.start(src: this.contentColor, target: &this.$contentColor) }
+    Animations.shared.stop(this, keyPath: \Layer.$contentColor)
+    if let arg0 = args[0] as? Animation { arg0.start(src: this.contentColor, target: this, keyPath: \Layer.$contentColor) }
     if let arg0 = as_simd(args[0]) as? simd_float4 { this.contentColor = arg0 }
     if let arg0 = as_simd(args[0]) as? Float { this.contentColor = simd_float4(repeating: arg0) }
     return nil
@@ -261,7 +265,8 @@ func get_layer_pivot(_ env: napi_env?, _ info: napi_callback_info?) -> napi_valu
 func set_layer_pivot(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     guard let args = get_args(env, info), args.count == 1 else { return nil }
     guard let this = unwrap_this(env!, info!) as? Layer else { return nil }
-    if let arg0 = args[0] as? Animation { arg0.start(src: this.pivot, target: &this.$pivot) }
+    Animations.shared.stop(this, keyPath: \Layer.$pivot)
+    if let arg0 = args[0] as? Animation { arg0.start(src: this.pivot, target: this, keyPath: \Layer.$pivot) }
     if let arg0 = as_simd(args[0]) as? simd_float2 { this.pivot = arg0 }
     return nil
 }
@@ -276,7 +281,8 @@ func get_layer_contentVolume(_ env: napi_env?, _ info: napi_callback_info?) -> n
 func set_layer_contentVolume(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     guard let args = get_args(env, info), args.count == 1 else { return nil }
     guard let this = unwrap_this(env!, info!) as? Layer else { return nil }
-    if let arg0 = args[0] as? Animation { arg0.start(src: this.contentVolume, target: &this.$contentVolume) }
+    Animations.shared.stop(this, keyPath: \Layer.$contentVolume)
+    if let arg0 = args[0] as? Animation { arg0.start(src: this.contentVolume, target: this, keyPath: \Layer.$contentVolume) }
     if let arg0 = as_simd(args[0]) as? Float { this.contentVolume = arg0 }
     return nil
 }

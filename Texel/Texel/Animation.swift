@@ -8,6 +8,46 @@
 import Combine
 import QuartzCore
 
+struct AnimationTarget: Hashable {
+    let id: UUID
+    let hash: Int
+
+    init(_ object: any Identifiable<UUID>, keyPath: AnyKeyPath) {
+        self.id = object.id
+        self.hash = keyPath.hashValue
+    }
+}
+
+class Animations {
+    static let shared = Animations()
+
+    fileprivate var store = [AnimationTarget:Animation]()
+
+    func register(_ animation: Animation, for target: any Identifiable<UUID>, keyPath: AnyKeyPath) {
+        let animationTarget = AnimationTarget(target, keyPath: keyPath)
+        register(animation, for: animationTarget)
+    }
+
+    func register(_ animation: Animation, for target: AnimationTarget) {
+        store[target] = animation
+    }
+
+    func stop(_ target: AnimationTarget) {
+        if let val = store[target] {
+            val.cancel()
+            store.removeValue(forKey: target)
+        }
+    }
+
+    func stop<T,V>(_ target: T, keyPath: KeyPath<T, Published<V>.Publisher>)
+    where T: Identifiable<UUID>
+    {
+        let animationTarget = AnimationTarget(target, keyPath: keyPath)
+        stop(animationTarget)
+    }
+
+}
+
 /**
  * Animation are keept alive by referencing self in the closure of the start method.
  * Once their subscription to the NormalizedTimer is canceled they are freed (if not referenced elsewhere).
@@ -58,54 +98,108 @@ class Animation {
     }
 
     deinit {
-//        print("Animation.deinit")
+        //        print("Animation.deinit")
     }
 
-    func start(src: Float, target: inout Published<Float>.Publisher) {
+    func start<T: Identifiable<UUID>>(src: Float, target: T, keyPath: KeyPath<T, Published<Float>.Publisher>) {
         guard let dst = dst as? Float else { return }
+        Animations.shared.register(self, for: target, keyPath: keyPath)
+        var publisher = target[keyPath: keyPath]
         timer = NormalizedTimer(duration: duration)
         timer?
             .map{ self.easeing($0) }
-            .map{ $0 * dst + (1-$0) * src }
-            .assign(to: &target)
+            .map{ simd_mix(src, dst, $0) }
+            .assign(to: &publisher)
     }
 
-    func start(src: simd_float2, target: inout Published<simd_float2>.Publisher) {
+    func start<T: Identifiable<UUID>>(src: simd_float2, target: T, keyPath: KeyPath<T, Published<simd_float2>.Publisher>) {
         guard let dst = dst as? simd_float2 else { return }
+        Animations.shared.register(self, for: target, keyPath: keyPath)
+        var publisher = target[keyPath: keyPath]
         timer = NormalizedTimer(duration: duration)
         timer?
             .map{ self.easeing($0) }
-            .map{ $0 * dst + (1-$0) * src }
-            .assign(to: &target)
+            .map{ mix(src, dst, t: $0) }
+            .assign(to: &publisher)
     }
 
-    func start(src: simd_float3, target: inout Published<simd_float3>.Publisher) {
+    func start<T: Identifiable<UUID>>(src: simd_float3, target: T, keyPath: KeyPath<T, Published<simd_float3>.Publisher>) {
         guard let dst = dst as? simd_float3 else { return }
+        Animations.shared.register(self, for: target, keyPath: keyPath)
+        var publisher = target[keyPath: keyPath]
         timer = NormalizedTimer(duration: duration)
         timer?
             .map{ self.easeing($0) }
-            .map{ $0 * dst + (1-$0) * src }
-            .assign(to: &target)
+            .map{ mix(src, dst, t: $0) }
+            .assign(to: &publisher)
     }
 
-    func start(src: simd_float4, target: inout Published<simd_float4>.Publisher) {
+    func start<T: Identifiable<UUID>>(src: simd_float4, target: T, keyPath: KeyPath<T, Published<simd_float4>.Publisher>) {
         guard let dst = dst as? simd_float4 else { return }
+        Animations.shared.register(self, for: target, keyPath: keyPath)
+        var publisher = target[keyPath: keyPath]
         timer = NormalizedTimer(duration: duration)
         timer?
             .map{ self.easeing($0) }
-            .map{ $0 * dst + (1-$0) * src }
-            .assign(to: &target)
+            .map{ mix(src, dst, t: $0) }
+            .assign(to: &publisher)
     }
 
-    func start(src: simd_quatf, target: inout Published<simd_quatf>.Publisher) {
+    func start<T: Identifiable<UUID>>(src: simd_quatf, target: T, keyPath: KeyPath<T, Published<simd_quatf>.Publisher>) {
         guard let dst = dst as? simd_quatf else { return }
+        Animations.shared.register(self, for: target, keyPath: keyPath)
+        var publisher = target[keyPath: keyPath]
         timer = NormalizedTimer(duration: duration)
         timer?
             .map{ self.easeing($0) }
             .map{ simd_slerp(src, dst, $0) }
-            .map { print($0); return $0; }
-            .assign(to: &target)
+            .assign(to: &publisher)
     }
+
+//    func start(src: Float, target: inout Published<Float>.Publisher) {
+//        guard let dst = dst as? Float else { return }
+//        timer = NormalizedTimer(duration: duration)
+//        timer?
+//            .map{ self.easeing($0) }
+//            .map{ simd_mix(src, dst, $0) }
+//            .assign(to: &target)
+//    }
+
+//    func start(src: simd_float2, target: inout Published<simd_float2>.Publisher) {
+//        guard let dst = dst as? simd_float2 else { return }
+//        timer = NormalizedTimer(duration: duration)
+//        timer?
+//            .map{ self.easeing($0) }
+//            .map{ mix(src, dst, t: $0) }
+//            .assign(to: &target)
+//    }
+
+//    func start(src: simd_float3, target: inout Published<simd_float3>.Publisher) {
+//        guard let dst = dst as? simd_float3 else { return }
+//        timer = NormalizedTimer(duration: duration)
+//        timer?
+//            .map{ self.easeing($0) }
+//            .map{ mix(src, dst, t: $0) }
+//            .assign(to: &target)
+//    }
+
+//    func start(src: simd_float4, target: inout Published<simd_float4>.Publisher) {
+//        guard let dst = dst as? simd_float4 else { return }
+//        timer = NormalizedTimer(duration: duration)
+//        timer?
+//            .map{ self.easeing($0) }
+//            .map{ mix(src, dst, t: $0) }
+//            .assign(to: &target)
+//    }
+
+//    func start(src: simd_quatf, target: inout Published<simd_quatf>.Publisher) {
+//        guard let dst = dst as? simd_quatf else { return }
+//        timer = NormalizedTimer(duration: duration)
+//        timer?
+//            .map{ self.easeing($0) }
+//            .map{ simd_slerp(src, dst, $0) }
+//            .assign(to: &target)
+//    }
 
     func cancel() {
         timer?.cancel()
