@@ -69,6 +69,8 @@ class Renderer: NSObject, MTKViewDelegate {
                  if let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) {
                      renderEncoder.label = "Primary Render Encoder"
 
+                     renderEncoder.setTriangleFillMode(engine.triangleFillMode.mode)
+                     
                      renderEncoder.setStencilReferenceValue(stencilReferenceValue)
                      renderEncoder.setDepthStencilState(engine.depthStencilTestState)
 

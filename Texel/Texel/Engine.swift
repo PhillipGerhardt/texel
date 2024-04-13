@@ -24,6 +24,7 @@ class Engine {
     let depthStencilPixelFormat: MTLPixelFormat = .depth32Float_stencil8
     let sampleCount = 1
     var clearColor = simd_float4(0,0,0,1)
+    var triangleFillMode: TriangleFillMode = .fill
 
     var scene = Scene()
 
@@ -187,9 +188,7 @@ class Engine {
 
         displayLink.start {
             if self.semaphore.wait(timeout: .now()) == .timedOut { return }
-            Task {
-                await self.scene.interpretEvents() // user input update
-            }
+            self.scene.interpretEvents() // user input update
             self.displayTick.send() // when nothing has changed this is not neccesarry
             self.animationTick.send() // animations update
             self.contentTick.send() // content update

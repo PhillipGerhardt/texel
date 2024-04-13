@@ -10,16 +10,22 @@ import Combine
 /**
  * Thread safe list of input events
  */
-actor EventsQueue {
-    var events = [Event]()
+class EventsQueue {
+    private var events = [Event]()
+    private let queue = DispatchQueue.main
 
     func append(_ event: Event) {
-        events.append(event)
+        queue.async {
+            self.events.append(event)
+        }
     }
 
-    func pending() async -> [Event] {
-        defer { events.removeAll() }
-        return events
+    func pending() -> [Event] {
+        return  queue.sync {
+            let pendingEvents = self.events
+            self.events.removeAll()
+            return pendingEvents
+        }
     }
 }
 
@@ -66,8 +72,9 @@ class Scene {
         return (bary1, bary2)
     }
 
-    func isVisible(layer: Layer) -> Bool {
-        guard let layerTransform = transform(ofLayer: layer) else { return false }
+    func isVisible(layer: Layer, with transform: simd_float4x4? = nil) -> Bool {
+        var layerTransform = transform ?? self.transform(ofLayer: layer)
+        guard let layerTransform else { return false }
 
         let layerSize = simd_float4(layer.size.x, layer.size.y, 0, 1)
         let ll = (layerTransform * (simd_float4(0,0,0,1) * layerSize)).xy
@@ -147,8 +154,8 @@ class Scene {
         return transform
     }
 
-    func interpretEvents() async {
-        let evts = await events.pending()
+    func interpretEvents() {
+        let evts = events.pending()
         for evt in evts {
 
             NodeInterpretEvent(evt)

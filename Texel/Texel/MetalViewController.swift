@@ -67,7 +67,7 @@ extension MetalViewController {
         point.x /= self.view.bounds.width
         point.y /= self.view.bounds.height
         let evt = Event(point: point, with: event, scale: scale)
-        Task { await engine.scene.events.append(evt) }
+        engine.scene.events.append(evt)
     }
 
     public override func mouseDown(with event: NSEvent) {

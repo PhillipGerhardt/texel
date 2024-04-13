@@ -12,6 +12,7 @@ import AVFoundation
 let texel_descriptors: [napi_property_descriptor] = [
     napi_property_descriptor(utf8name: strdup("layers"), name: nil, method: nil, getter: get_layers, setter: set_layers, value: nil, attributes: napi_default_jsproperty, data: nil),
     napi_property_descriptor(utf8name: strdup("clearColor"), name: nil, method: nil, getter: get_clearColor, setter: set_clearColor, value: nil, attributes: napi_default_jsproperty, data: nil),
+    napi_property_descriptor(utf8name: strdup("triangleFillMode"), name: nil, method: nil, getter: get_triangleFillMode, setter: set_triangleFillMode, value: nil, attributes: napi_default_jsproperty, data: nil),
     napi_property_descriptor(utf8name: strdup("size"), name: nil, method: nil, getter: get_size, setter: nil, value: nil, attributes: napi_default_jsproperty, data: nil),
     napi_property_descriptor(utf8name: strdup("quit"), name: nil, method: quit, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("makeThumbnail"), name: nil, method: make_thumbnail, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
@@ -41,7 +42,6 @@ let texel_descriptors: [napi_property_descriptor] = [
     napi_property_descriptor(utf8name: strdup("Filter"), name: nil, method: make_filter, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("Map"), name: nil, method: make_map, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("FF"), name: nil, method: make_ff, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
-
 ]
 
 // MARK: - layers
@@ -68,6 +68,20 @@ func set_clearColor(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value
     guard let args = get_args(env, info), args.count == 1 else { return nil }
     guard let arg0 = as_simd(args[0]) as? simd_float4 else { return nil }
     engine.clearColor = arg0
+    return nil
+}
+
+// MARK: - triangleFillMode
+
+func get_triangleFillMode(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+    return as_value(env, engine.triangleFillMode.rawValue)
+}
+
+func set_triangleFillMode(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
+    guard let args = get_args(env, info), args.count == 1 else { return nil }
+    guard let val = args[0] as? String else { return nil }
+    guard let val = TriangleFillMode(rawValue: val) else { return nil }
+    engine.triangleFillMode = val
     return nil
 }
 
@@ -104,6 +118,7 @@ func enums(_ env: napi_env?, _ info: napi_callback_info?) -> napi_value? {
     result[String(describing: ScaleMode.self)] = ScaleMode.allCases.map{$0.rawValue}
     result[String(describing: VerticalAlignment.self)] = VerticalAlignment.allCases.map{$0.rawValue}
     result[String(describing: HorizontalAlignment.self)] = HorizontalAlignment.allCases.map{$0.rawValue}
+    result[String(describing: TriangleFillMode.self)] = TriangleFillMode.allCases.map{$0.rawValue}
     return as_value(env, result)
 }
 
