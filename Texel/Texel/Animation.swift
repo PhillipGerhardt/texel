@@ -29,13 +29,25 @@ class Animations {
     }
 
     func register(_ animation: Animation, for target: AnimationTarget) {
-        store[target] = animation
+        engine.serialQueue.async {
+            self.store[target] = animation
+        }
+    }
+
+    func deregister(_ animation: Animation) {
+        engine.serialQueue.async {
+            if let entry = self.store.first(where: { _, val in val === animation }) {
+                self.store.removeValue(forKey: entry.key)
+            }
+        }
     }
 
     func stop(_ target: AnimationTarget) {
-        if let val = store[target] {
-            val.cancel()
-            store.removeValue(forKey: target)
+        engine.serialQueue.async {
+            if let val = self.store[target] {
+                val.cancel()
+                self.store.removeValue(forKey: target)
+            }
         }
     }
 
@@ -98,7 +110,7 @@ class Animation {
     }
 
     deinit {
-        //        print("Animation.deinit")
+//        print("Animation.deinit")
     }
 
     func start<T: Identifiable<UUID>>(src: Float, target: T, keyPath: KeyPath<T, Published<Float>.Publisher>) {
@@ -109,6 +121,7 @@ class Animation {
         timer?
             .map{ self.easeing($0) }
             .map{ simd_mix(src, dst, $0) }
+            .handleEvents(receiveCompletion: { _ in Animations.shared.deregister(self) })
             .assign(to: &publisher)
     }
 
@@ -120,6 +133,7 @@ class Animation {
         timer?
             .map{ self.easeing($0) }
             .map{ mix(src, dst, t: $0) }
+            .handleEvents(receiveCompletion: { _ in Animations.shared.deregister(self) })
             .assign(to: &publisher)
     }
 
@@ -131,6 +145,7 @@ class Animation {
         timer?
             .map{ self.easeing($0) }
             .map{ mix(src, dst, t: $0) }
+            .handleEvents(receiveCompletion: { _ in Animations.shared.deregister(self) })
             .assign(to: &publisher)
     }
 
@@ -142,6 +157,7 @@ class Animation {
         timer?
             .map{ self.easeing($0) }
             .map{ mix(src, dst, t: $0) }
+            .handleEvents(receiveCompletion: { _ in Animations.shared.deregister(self) })
             .assign(to: &publisher)
     }
 
@@ -153,6 +169,7 @@ class Animation {
         timer?
             .map{ self.easeing($0) }
             .map{ simd_slerp(src, dst, $0) }
+            .handleEvents(receiveCompletion: { _ in Animations.shared.deregister(self) })
             .assign(to: &publisher)
     }
 
