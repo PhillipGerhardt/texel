@@ -9,7 +9,9 @@ import Metal
 import Quartz
 import Combine
 
-class FilterContent: Content, TextureContent {
+class FilterContent: Content, TextureContent, Identifiable {
+
+    let id = UUID()
 
     var size: simd_int2 = .zero
     var texture: MTLTexture?

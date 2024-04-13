@@ -50,7 +50,8 @@ func set_filter_time(_ env: napi_env?, _ info: napi_callback_info?) -> napi_valu
     guard let args = get_args(env, info) else { return nil }
     guard args.count == 1 else { return nil }
     guard let this = unwrap_this(env!, info!) as? FilterContent else { return nil }
-    if let arg0 = args[0] as? Animation { arg0.start(src: this.time, target: &this.$time) }
+    Animations.shared.stop(this, keyPath: \FilterContent.$time)
+    if let arg0 = args[0] as? Animation { arg0.start(src: this.time, target: this, keyPath: \FilterContent.$time) }
     if let arg0 = args[0] as? Float { this.time = arg0 }
     return nil
 }
