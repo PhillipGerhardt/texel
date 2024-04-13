@@ -8,24 +8,29 @@
 
 import MetalKit
 
+fileprivate extension OperationQueue {
+    convenience init(maxConcurrentOperationCount: Int) {
+        self.init()
+        self.maxConcurrentOperationCount = maxConcurrentOperationCount
+    }
+}
+
+fileprivate let operationQueue = OperationQueue(maxConcurrentOperationCount: 8)
+
 /**
  * Show an image.
  */
 class ImageContent: Content, TextureContent {
     var size: simd_int2 = .zero
     var texture: MTLTexture?
-    var semaphore: DispatchSemaphore?
 
     convenience init(path: String, loadSync: Bool? = nil) {
         self.init(url: URL(fileURLWithPath: path), loadSync: loadSync)
     }
 
     init(url: URL, loadSync: Bool? = nil) {
-        if loadSync == true {
-            semaphore = DispatchSemaphore(value: 0)
-        }
-        Task {
-            defer { semaphore?.signal() }
+
+        func load(image: ImageContent) {
             let options: [MTKTextureLoader.Option: Any] = [
                 .allocateMipmaps: true,
                 .generateMipmaps: true,
@@ -33,16 +38,27 @@ class ImageContent: Content, TextureContent {
                 .SRGB: false
             ]
             do {
-                texture = try await engine.textureLoader.newTexture(URL: url, options: options)
-                if let texture = texture {
-                    size = simd_int2(Int32(texture.width), Int32(texture.height))
-                    // extend texture with a size property?
-                }
+                let texture = try engine.textureLoader.newTexture(URL: url, options: options)
+                image.size = simd_int2(Int32(texture.width), Int32(texture.height))
+                image.texture = texture
             } catch {
                 print("error loading \(url):", error)
             }
         }
-        semaphore?.wait()
+
+        if loadSync == true {
+            load(image: self)
+        } else {
+            operationQueue.addOperation { [weak self] in
+                if let self {
+                    load(image: self)
+                }
+            }
+        }
+    }
+
+    deinit {
+//        print("ImageContent.deinit")
     }
 
     func configure(_ renderEncoder: MTLRenderCommandEncoder) -> Bool {
