@@ -13,6 +13,7 @@ enum DetectionType: String {
     case face
     case humanBody
     case humanHand
+    case humanBody3D
 }
 
 class SampleBufferReader {
@@ -141,11 +142,9 @@ class VisionDetectorContent: Content {
     func step() {
         if semaphore.wait(timeout: .now()) == .timedOut { return }
         defer { semaphore.signal() }
-
         guard let sampleBuffer = reader.step() else { return }
 
         if detectionRequest == nil {
-
             let completionHandler: VNRequestCompletionHandler = { [weak self] (request: VNRequest, error: Error?) in
                 if error != nil {
                     print("Detection error: \(String(describing: error)).")
@@ -155,7 +154,6 @@ class VisionDetectorContent: Content {
                     self.update(results: results)
                 }
             }
-
             switch detectionType {
             case .face:
                 detectionRequest = VNDetectFaceRectanglesRequest(completionHandler: completionHandler)
@@ -163,8 +161,9 @@ class VisionDetectorContent: Content {
                 detectionRequest = VNDetectHumanBodyPoseRequest(completionHandler: completionHandler)
             case .humanHand:
                 detectionRequest = VNDetectHumanHandPoseRequest(completionHandler: completionHandler)
+            case .humanBody3D:
+                detectionRequest = VNDetectHumanBodyPose3DRequest(completionHandler: completionHandler)
             }
-
         }
         if let detectionRequest = detectionRequest {
             var requests = [VNRequest]()
@@ -172,11 +171,11 @@ class VisionDetectorContent: Content {
             let requestHandler = VNImageRequestHandler(cmSampleBuffer: sampleBuffer, options: [:])
             try? requestHandler.perform(requests)
         }
+
     }
 
     func update(results: [VNObservation]) {
         var quads = [(Float, Float, Float, Float)]()
-
         for result in results {
             if let result = result as? VNHumanBodyPoseObservation {
                 let points = result.availableJointNames.compactMap{ try? result.recognizedPoint($0) }.filter{ $0.confidence > 0.1 }
@@ -205,7 +204,18 @@ class VisionDetectorContent: Content {
                     quads.append((x,y,w,h))
                 }
             }
-
+            if let result = result as? VNHumanBodyPose3DObservation {
+                do {
+                    let points = try result.availableJointNames.map { try result.pointInImage($0) }
+                    points.forEach {
+                        let w: Float = 0.01  * Float(size.x)
+                        let h: Float = 0.01  * Float(size.y)
+                        let x = Float($0.x) * Float(size.x)
+                        let y = Float($0.y) * Float(size.x)
+                        quads.append((x,y,w,h))
+                    }
+                } catch {}
+            }
         }
 
         self.quads = quads
@@ -215,9 +225,8 @@ class VisionDetectorContent: Content {
 
         if let commandBuffer = commandQueue.makeCommandBuffer() {
             if let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) {
-                renderEncoder.setTriangleFillMode(.lines)
-
                 renderEncoder.setRenderPipelineState(pipeline)
+                renderEncoder.setTriangleFillMode(.lines)
                 renderEncoder.setVertexBytes(&uniforms, length: MemoryLayout<Uniforms>.size, index: BufferIndex.uniforms.rawValue)
                 renderEncoder.setVertexBuffer(engine.verticesBuffer, offset:0, index: BufferIndex.vertices.rawValue)
                 for (x,y,w,h) in self.quads {
