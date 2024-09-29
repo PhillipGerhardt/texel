@@ -29,6 +29,8 @@ typedef NS_ENUM(EnumBackingType, BufferIndex)
     BufferIndexTime             = 3,
     BufferIndexPoint            = 4,
     BufferIndexModelTicker      = 5,
+    BufferIndexModelCustomDraw  = 6,
+    BufferIndexSamples          = 7,
 };
 
 typedef NS_ENUM(EnumBackingType, VertexAttribute)
@@ -66,3 +68,8 @@ typedef struct {
 typedef struct {
     float offset;
 } ModelTicker;
+
+typedef struct {
+    int numSamples;
+    float pointSize;
+} ModelCustomDraw;

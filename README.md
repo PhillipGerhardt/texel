@@ -145,6 +145,15 @@ Make map:
     map.start()
     layer.content = map;
 
+Custom Draw:
+
+    layer = texel.Layer();
+    texel.layers = [layer];
+    layer.size = texel.size;
+    layer.position = texel.size.map(v=>v/2);
+    content = texel.CustomDraw(100, 0.1, 10.0);
+    layer.content = content;
+
 ## Run demos
 
 The demos use asset files from your "Movies" and "Pictures" directories.
@@ -161,6 +170,7 @@ Adjust that to your needs.
     eval(fs.readFileSync('fragment_pixelate.js', 'utf8'));
     eval(fs.readFileSync('fragment_sdf.js', 'utf8'));
     eval(fs.readFileSync('fragment_wave_combine.js', 'utf8'));
+    eval(fs.readFileSync('fragment_edge.js', 'utf8'));
     eval(fs.readFileSync('game_of_life.js', 'utf8'));
     eval(fs.readFileSync('grid_exchange.js', 'utf8'));
     eval(fs.readFileSync('movies.js', 'utf8'));
@@ -173,4 +183,4 @@ Adjust that to your needs.
     eval(fs.readFileSync('hit_test.js', 'utf8'));
     eval(fs.readFileSync('color_some_layers.js', 'utf8'));
     eval(fs.readFileSync('moving_bars.js', 'utf8'));
-)
+

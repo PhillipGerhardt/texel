@@ -48,15 +48,19 @@ let movieDir = path.join(os.homedir(), 'Movies');
 let files = texel.contentsOfDirectory(movieDir).filter(v=>texel.isMovie(v));
 files = texel.shuffle(files);
 console.log('file', files[0]);
-let movie = files[0];
+
+movie = files[0];
 movie = texel.Movie(movie, true, true);
 movie.start();
+
 preview = texel.Layer();
+preview.size = texel.size.map(v=>v/2)
+preview.position = texel.size.map(v=>v * 1/3);
 preview.content = movie;
 
 layer = texel.Layer();
-layer.size = texel.size.map(v=>v*0.9)
-layer.position = texel.size.map(v=>v/2);
+layer.size = texel.size.map(v=>v/2)
+layer.position = texel.size.map(v=>v * 2/3);
 fragment = texel.Fragment();
 fragment.source = src;
 fragment.textureOne = movie;

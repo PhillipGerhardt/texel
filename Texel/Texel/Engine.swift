@@ -59,6 +59,7 @@ class Engine {
     let pipelineContentYUVTriplanar: MTLRenderPipelineState
     let pipelineStencil: MTLRenderPipelineState
     let pipelineTicker: MTLRenderPipelineState
+    let pipelineCustomDraw: MTLRenderPipelineState
 
     let depthStencilIncrementState: MTLDepthStencilState
     let depthStencilDecrementState: MTLDepthStencilState
@@ -79,6 +80,7 @@ class Engine {
 
     init() throws {
         self.device = MTLCreateSystemDefaultDevice()!
+
         self.textureLoader = MTKTextureLoader.init(device: device)
         if CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, device, nil, &textureCache) != kCVReturnSuccess {
             print("error", Fehler.CVMetalTextureCacheCreate)
@@ -155,6 +157,11 @@ class Engine {
             pipelineDescriptor.vertexFunction = library.makeFunction(name: "vertexTicker")
             pipelineDescriptor.fragmentFunction = library.makeFunction(name: "fragmentTicker")
             pipelineTicker = try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
+
+            pipelineDescriptor.label = "CustomDraw"
+            pipelineDescriptor.vertexFunction = library.makeFunction(name: "vertexCustomDraw")
+            pipelineDescriptor.fragmentFunction = library.makeFunction(name: "fragmentCustomDraw")
+            pipelineCustomDraw = try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
 
             pipelineDescriptor.label = "Stencil"
             pipelineDescriptor.vertexFunction = library.makeFunction(name: "vertexStencil")

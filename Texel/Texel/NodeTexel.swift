@@ -42,6 +42,7 @@ let texel_descriptors: [napi_property_descriptor] = [
     napi_property_descriptor(utf8name: strdup("Filter"), name: nil, method: make_filter, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("Map"), name: nil, method: make_map, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
     napi_property_descriptor(utf8name: strdup("FF"), name: nil, method: make_ff, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
+    napi_property_descriptor(utf8name: strdup("CustomDraw"), name: nil, method: make_customDraw, getter: nil, setter: nil, value: nil, attributes: napi_default_method, data: nil),
 ]
 
 // MARK: - layers

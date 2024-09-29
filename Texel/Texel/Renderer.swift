@@ -126,7 +126,11 @@ class Renderer: NSObject, MTKViewDelegate {
                 var model = Model(matrix: transform * layer.contentTransform, color: layer.contentColor, size: layer.contentSize)
                 renderEncoder.setVertexBytes(&model, length: MemoryLayout<Model>.size, index: BufferIndex.model.rawValue)
                 renderEncoder.setFragmentBytes(&model, length: MemoryLayout<Model>.size, index: BufferIndex.model.rawValue)
-                renderEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
+                if let drawCall = content.drawCall {
+                    drawCall(renderEncoder)
+                } else {
+                    renderEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
+                }
             }
 
             let children = layer.children // copy on write

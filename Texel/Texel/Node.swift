@@ -155,6 +155,7 @@ func as_any(_ env: napi_env?, _ val: napi_value) -> Any? {
     if let t: FilterContent = cast_to(env!, val) { return t }
     if let t: MapContent = cast_to(env!, val) { return t }
     if let t: FFContent = cast_to(env!, val) { return t }
+    if let t: CustomDrawContent  = cast_to(env!, val) { return t }
 
     return nil
 }
@@ -220,6 +221,10 @@ func as_value(_ env: napi_env?, _ t: Any) -> napi_value? {
     }
     if let t = t as? Animation, let val = wrap(env!, t) {
         napi_define_properties(env, val, animation_descriptors.count, animation_descriptors)
+        return val
+    }
+    if let t = t as? CustomDrawContent, let val = wrap(env!, t) {
+        napi_define_properties(env, val, customDraw_descriptors.count, customDraw_descriptors)
         return val
     }
 

@@ -25,6 +25,7 @@ typedef struct
 {
     float4 position [[position]];
     float2 texCoord;
+    float pointsize[[point_size]];
 } FragmentData;
 
 // MARK: - content rgba
@@ -272,4 +273,32 @@ kernel void gameOfLifeGeneration(texture2d<float, access::read> one [[texture(Te
     }
 
     two.write(c, index);
+}
+
+// MARK: - customDraw
+
+[[vertex]] FragmentData vertexCustomDraw(uint vertexID [[vertex_id]],
+                                         constant Uniforms& uniforms [[ buffer(BufferIndexUniforms) ]],
+                                         constant Model& model [[ buffer(BufferIndexModel) ]],
+                                         constant ModelCustomDraw& modelCustomDraw [[ buffer(BufferIndexModelCustomDraw) ]],
+                                         constant float* samples [[buffer(BufferIndexSamples)]]
+                                         )
+{
+    FragmentData out;
+    float sx = model.size.x / modelCustomDraw.numSamples;
+    float sy = model.size.y / 1;
+    float sample = samples[vertexID];
+    float4 position = float4(vertexID * sx, sample * sy, 0, 1);
+    out.position = uniforms.projectionMatrix * uniforms.viewMatrix * model.matrix * position;
+    out.pointsize = modelCustomDraw.pointSize;
+    return out;
+}
+
+[[fragment]] float4 fragmentCustomDraw(FragmentData in [[stage_in]],
+                                       constant Model& model [[ buffer(BufferIndexModel) ]]
+                                       )
+{
+    float4 rgba = float4(1);
+    rgba *= model.color;
+    return rgba;
 }

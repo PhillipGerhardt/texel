@@ -22,6 +22,7 @@ protocol Content: AnyObject {
     func seek(to position: Float) -> Void
     func configure(_ renderEncoder: MTLRenderCommandEncoder) -> Bool
     func onEvent(_ event: NSEvent, at point: simd_float2) -> Void
+    var drawCall: ((MTLRenderCommandEncoder) -> Void)? { get }
 }
 
 extension Content {
@@ -33,4 +34,5 @@ extension Content {
     func seek(to position: Float) {}
     func configure(_ renderEncoder: MTLRenderCommandEncoder) -> Bool { false }
     func onEvent(_ event: NSEvent, at point: simd_float2) -> Void {}
+    var drawCall: ((MTLRenderCommandEncoder) -> Void)? { nil }
 }

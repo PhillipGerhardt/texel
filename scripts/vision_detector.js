@@ -16,8 +16,8 @@ l2.position = l1.position;
 
 l1.content = texel.Movie(file, true);
 
-// humanHand, humanBody, face
-l2.content = texel.VisionDetector(file, 'face', [512,512]);
+// humanHand, humanBody, face, humanBody3D
+l2.content = texel.VisionDetector(file, 'humanBody3D', [512,512]);
 l2.color = 0;
 l2.contentScaling = 'stretch';
 
